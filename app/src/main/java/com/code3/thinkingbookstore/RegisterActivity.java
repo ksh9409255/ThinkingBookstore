@@ -49,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     nToast = Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT);
                                     nToast.show();
                                     finish();
+                                    overridePendingTransition(0, 0);
                                 } else {
                                     if(nToast != null) nToast.cancel();
                                     nToast = Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT);
