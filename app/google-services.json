@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "560627504826",
+    "firebase_url": "https://thinkingbookshop.firebaseio.com",
+    "project_id": "thinkingbookshop",
+    "storage_bucket": "thinkingbookshop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:560627504826:android:ffa1a3272020a876a55483",
+        "android_client_info": {
+          "package_name": "com.code3.thinkingbookstore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "560627504826-1bfb30pm22n1ts3ej3krpvevj3e56rft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfrDKG9UcnKux7TjuooNYwVzrf4OvwGzQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "560627504826-1bfb30pm22n1ts3ej3krpvevj3e56rft.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
