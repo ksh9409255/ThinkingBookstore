@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="60dp">
+    android:padding="60dp"
+    android:onClick="registerOnClick">
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +36,8 @@
         android:background="@drawable/login_edit"
         android:textSize="20dp"
         android:hint="id@email.com"
-        android:padding="6dp" />
+        android:padding="6dp"
+        android:inputType="textEmailAddress" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,7 +53,8 @@
         android:background="@drawable/login_edit"
         android:textSize="20dp"
         android:hint=""
-        android:padding="6dp" />
+        android:padding="6dp"
+        android:inputType="textPassword" />
 
     <Button
         android:id="@+id/morphBtn"

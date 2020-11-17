@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText newid, newpw;
+    private InputMethodManager imm;
     private Button morphBtn;
     private FirebaseAuth mAuth;
     Toast nToast;
@@ -30,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         newid = (EditText)findViewById(R.id.newid);
         newpw = (EditText)findViewById(R.id.newpw);
+        imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         morphBtn = (Button)findViewById(R.id.morphBtn);
         mAuth = FirebaseAuth.getInstance();
 
@@ -59,5 +62,10 @@ public class RegisterActivity extends AppCompatActivity {
                         });
             }
         });
+    }
+
+    public void registerOnClick(View v) {
+        imm.hideSoftInputFromWindow(newid.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(newpw.getWindowToken(), 0);
     }
 }
