@@ -5,4 +5,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
+    <style name = "DarkViewer" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="textColor">#FFFFFF</item>
+        <item name="bgColor">#000000</item>
+    </style>
 </resources>

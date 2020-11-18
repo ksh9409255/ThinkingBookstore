@@ -7,25 +7,55 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import static android.view.View.GONE;
+
 public class ViewerActivity extends AppCompatActivity {
-    boolean isBarOpen = true;
-    Animation fromup, toup, fromdown, todown;
-    LinearLayout upbar, downbar;
-    FloatingActionMenu menu_viewer;
+    private ImageButton backbtn, bookmark, list;
+    private Button textprop, page;
+    private FloatingActionButton copy, darkmode, comment;
+    private SeekBar seekbar;
+    private Spinner spinner, spinner2;
+    private boolean isBarOpen = true;
+    private Animation fromup, toup, fromdown, todown;
+    private LinearLayout upbar, downbar, textproperties;
+    private FloatingActionMenu menu_viewer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
-        menu_viewer = (FloatingActionMenu)findViewById(R.id.menu_viewer);
+        backbtn = (ImageButton)findViewById(R.id.backbtn_viewer);
+        bookmark = (ImageButton)findViewById(R.id.bookmark_viewer);
+        list = (ImageButton)findViewById(R.id.list_viewer);
+        textprop = (Button)findViewById(R.id.textprop_viewer);
+        page = (Button)findViewById(R.id.page_viewer);
+        copy = (FloatingActionButton)findViewById(R.id.copy_viewer);
+        darkmode = (FloatingActionButton)findViewById(R.id.darkmode_viewer);
+        comment = (FloatingActionButton)findViewById(R.id.comment_viewer);
+        seekbar = (SeekBar)findViewById(R.id.seekbar_viewer);
+        spinner = (Spinner)findViewById(R.id.spinner_viewer);
+        spinner2 = (Spinner)findViewById(R.id.spinner2_viewer);
 
+        menu_viewer = (FloatingActionMenu)findViewById(R.id.menu_viewer);
+        copy = (FloatingActionButton)findViewById(R.id.copy_viewer);
+        darkmode = (FloatingActionButton)findViewById(R.id.darkmode_viewer);
+        comment = (FloatingActionButton)findViewById(R.id.comment_viewer);
+
+        /* 애니매이션 */
         upbar = (LinearLayout)findViewById(R.id.upbar);
         downbar = (LinearLayout)findViewById(R.id.downbar);
+        textproperties = (LinearLayout)findViewById(R.id.textprop_menu);
 
         fromup = AnimationUtils.loadAnimation(this, R.anim.translate_fromup);
         toup = AnimationUtils.loadAnimation(this, R.anim.translate_toup);
@@ -102,6 +132,113 @@ public class ViewerActivity extends AppCompatActivity {
 
             }
         });
+
+        /* 뒤로가기 버튼 */
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        /* 글자 설정 */
+        textprop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(textproperties.getVisibility() == View.VISIBLE) {
+                    textproperties.setVisibility(View.GONE);
+                } else {
+                    textproperties.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {    // 글꼴
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {   // 글자 색
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {  // 글자크기
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        /* 북마크 */
+        bookmark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        /* 책갈피 이동 */
+        list.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        /* 현재 페이지 표시(누르면 페이지 이동) */
+        page.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        /* 플로팅 메뉴 */
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        darkmode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     @Override
@@ -123,10 +260,14 @@ public class ViewerActivity extends AppCompatActivity {
             upbar.startAnimation(toup);
             downbar.startAnimation(todown);
             menu_viewer.startAnimation(todown);
-        } else { //페이지 닫혀있으면
+        } else {
             upbar.startAnimation(fromup);
             downbar.startAnimation(fromdown);
             menu_viewer.startAnimation(fromdown);
+        }
+
+        if(textproperties.getVisibility() == View.VISIBLE) {
+            textproperties.setVisibility(View.GONE);
         }
     }
 }
