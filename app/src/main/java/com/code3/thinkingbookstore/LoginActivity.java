@@ -17,10 +17,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText idIn, pwIn;
-    InputMethodManager imm;
-    Button loginBtn, regiBtn;
-    FirebaseAuth mAuth;
+    private EditText idIn, pwIn;
+    private InputMethodManager imm;
+    private Button loginBtn, regiBtn;
+    private FirebaseAuth mAuth;
     Toast mToast;
 
     @Override
