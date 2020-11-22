@@ -17,6 +17,9 @@ import android.widget.Spinner;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
+import io.hamed.htepubreadr.component.EpubReaderComponent;
+import io.hamed.htepubreadr.entity.BookEntity;
+
 import static android.view.View.GONE;
 
 public class ViewerActivity extends AppCompatActivity {
@@ -29,6 +32,9 @@ public class ViewerActivity extends AppCompatActivity {
     private Animation fromup, toup, fromdown, todown;
     private LinearLayout upbar, downbar, textproperties;
     private FloatingActionMenu menu_viewer;
+
+    private EpubReaderComponent epubReader;
+    private BookEntity bookEntity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,12 @@ public class ViewerActivity extends AppCompatActivity {
         copy = (FloatingActionButton)findViewById(R.id.copy_viewer);
         darkmode = (FloatingActionButton)findViewById(R.id.darkmode_viewer);
         comment = (FloatingActionButton)findViewById(R.id.comment_viewer);
+
+        try {
+            epubReader = new EpubReaderComponent("/data/data/com.code3.thinkingbookstore/files/gaskell-cranford.epub");
+        } catch(Exception e) {
+
+        }
 
         /* 애니매이션 */
         upbar = (LinearLayout)findViewById(R.id.upbar);

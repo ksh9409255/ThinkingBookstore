@@ -50,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         }
 
-
         BottomNavigationView bottomNavigationView = findViewById(R.id.bn_bottom_navi);
         bottomNavigationView.setItemIconTintList(null);
 
