@@ -174,17 +174,28 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1" />
-        <Button
-            android:id="@+id/page_viewer"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:background="#00FFFFFF"
-            android:stateListAnimator="@null"
-            android:textAllCaps="false"
-            android:text=""
-            android:textSize="30dp"
-            android:focusable="false" />
+            android:layout_height="match_parent">
+            <Button
+                android:id="@+id/page_viewer"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="#00FFFFFF"
+                android:stateListAnimator="@null"
+                android:textAllCaps="false"
+                android:text=""
+                android:textSize="30dp"
+                android:focusable="false" />
+            <TextView
+                android:id="@+id/chnow_viewer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textSize="15dp"
+                android:text=""/>
+        </LinearLayout>
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu

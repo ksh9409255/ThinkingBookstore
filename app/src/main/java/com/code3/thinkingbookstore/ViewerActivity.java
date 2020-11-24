@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
@@ -49,6 +50,7 @@ import io.hamed.htepubreadr.util.EpubUtil;
 public class ViewerActivity extends AppCompatActivity {
     private ImageButton backbtn, bookmark, list;
     private Button textprop, page;
+    private TextView chnow;
     private FloatingActionButton copy, darkmode, comment;
     private SeekBar seekbar;
     private Spinner spinner, spinner2;
@@ -187,6 +189,7 @@ public class ViewerActivity extends AppCompatActivity {
                                 }
                                 epubView.setUp(content);
                                 changeFont(fontNow);
+                                chnow.setText("/Ch"+(chapter-1));
                                 makeToast("챕터 "+(chapter - 1));
                             }
                             //Log.i("i", "slide<<<<<<<<<<<<<<<<<<<");
@@ -236,6 +239,7 @@ public class ViewerActivity extends AppCompatActivity {
                                         }, 100);
                                     }
                                 });
+                                chnow.setText("/Ch"+(chapter-1));
                                 makeToast("챕터 "+(chapter - 1));
                             }
                             //Log.i("i", "slide>>>>>>>>>>>>>>>>>>>");
@@ -493,6 +497,7 @@ public class ViewerActivity extends AppCompatActivity {
         list = (ImageButton)findViewById(R.id.list_viewer);
         textprop = (Button)findViewById(R.id.textprop_viewer);
         page = (Button)findViewById(R.id.page_viewer);
+        chnow = (TextView)findViewById(R.id.chnow_viewer);
         copy = (FloatingActionButton)findViewById(R.id.copy_viewer);
         darkmode = (FloatingActionButton)findViewById(R.id.darkmode_viewer);
         comment = (FloatingActionButton)findViewById(R.id.comment_viewer);
@@ -542,6 +547,7 @@ public class ViewerActivity extends AppCompatActivity {
         }
         epubView.setUp(content);
         page.setText((pageNum+1) + " Page");
+        chnow.setText("/Ch"+(chapter-1));
         changeFont(0);
     }
 
