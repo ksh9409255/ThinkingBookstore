@@ -392,6 +392,23 @@ public class ViewerActivity extends AppCompatActivity {
                         content
                 );
                 epubView.loadDataWithBaseURL(epubView.getBaseUrl(), htmlBuilderModule.getBaseContent(entity), "text/html", "UTF-8", null);
+                epubView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        final WebView newView = epubView;
+
+                        newView.postDelayed(new Runnable() {
+                            public void run() {
+                                newView.postDelayed(new Runnable() {
+                                    public void run() {
+                                        pageNum = 0;
+                                        page.setText((pageNum+1) + " Page");
+                                    }
+                                }, 50);
+                            }
+                        }, 10);
+                    }
+                });
             }
 
             @Override
@@ -587,5 +604,22 @@ public class ViewerActivity extends AppCompatActivity {
         }
         epubView.setUp(content);
         page.setText((pageNum+1) + " Page");
+
+        try {
+            content = content.replaceAll("src=\"../", "src=\"" + epubView.getBaseUrl() + "");
+            content = content.replaceAll("href=\"../", "href=\"" + epubView.getBaseUrl() + "");
+        } catch (Exception e) {
+            e.printStackTrace();
+            content = "404";
+        }
+        HtmlBuilderModule htmlBuilderModule = new HtmlBuilderModule();
+        HtmlBuilderEntity entity = new HtmlBuilderEntity(
+                "img{display: inline; height: auto; max-width: 100%;}",
+                listFont.get(0).getUrl(),
+                content
+        );
+        epubView.loadDataWithBaseURL(epubView.getBaseUrl(), htmlBuilderModule.getBaseContent(entity), "text/html", "UTF-8", null);
     }
+
+    
 }
