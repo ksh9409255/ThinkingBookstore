@@ -1,5 +1,6 @@
 package com.code3.thinkingbookstore;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -7,16 +8,25 @@ import androidx.cardview.widget.CardView;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ActionMode;
+import android.view.ContextMenu;
+import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -475,6 +485,27 @@ public class ViewerActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onActionModeStarted(final android.view.ActionMode mode) {
+        Menu menu = mode.getMenu();
+        menu.add("Like!")
+                .setEnabled(true)
+                .setVisible(true)
+                .setOnMenuItemClickListener(item -> {
+                    //해당 메뉴를 눌렸을 때 수행할 작업
+                    epubView.evaluateJavascript("(function(){return window.getSelection().toString()})()",
+                            new ValueCallback<String>() {
+                                @Override
+                                public void onReceiveValue(String value) {
+                                    Log.i("i", value+"<<<<<<<<<<<<<<<<<<<");
+                                }
+                            });
+                    return true;
+                });
+        super.onActionModeStarted(mode);
+    }
+    
     public void viewerOnClick(View v) {
         if(isBarOpen){
             upbar.startAnimation(toup);
