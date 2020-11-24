@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,8 +17,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
@@ -49,8 +46,6 @@ import io.hamed.htepubreadr.module.HtmlBuilderModule;
 import io.hamed.htepubreadr.ui.view.EpubView;
 import io.hamed.htepubreadr.util.EpubUtil;
 
-import static android.view.View.GONE;
-
 public class ViewerActivity extends AppCompatActivity {
     private ImageButton backbtn, bookmark, list;
     private Button textprop, page;
@@ -74,6 +69,7 @@ public class ViewerActivity extends AppCompatActivity {
     private String content;
     private List<FontEntity> listFont = new ArrayList<>();
     private Context context = this;
+    private int fontNow = 0;
     private int pageNum = 0;
     private int scrollLen;
     private int totalPage;
@@ -81,7 +77,6 @@ public class ViewerActivity extends AppCompatActivity {
     float contentHeight;
     float total;
     float percent = 0;
-    private Point size;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -93,16 +88,11 @@ public class ViewerActivity extends AppCompatActivity {
 
         bindView();
 
-        size = new Point();
-        getWindowManager().getDefaultDisplay().getSize(size);
-
-        listFont.add(new FontEntity("https://hamedtaherpour.github.io/sample-assets/font/Acme.css", "Acme"));
-        listFont.add(new FontEntity("https://hamedtaherpour.github.io/sample-assets/font/IndieFlower.css", "IndieFlower"));
-        listFont.add(new FontEntity("https://hamedtaherpour.github.io/sample-assets/font/SansitaSwashed.css", "SansitaSwashed"));
-
         /* 책 불러오기 */
-        loadBook("gaskell-cranford.epub");
+        loadFont();
+        loadBook("verne-an-antarctic-mystery");
 
+        /* epubView 화면 터치 설정 */
         epubView.setOnTouchListener(new View.OnTouchListener() {
             public final static int FINGER_RELEASED = 0;
             public final static int FINGER_TOUCHED = 1;
@@ -180,17 +170,11 @@ public class ViewerActivity extends AppCompatActivity {
                                         epubView.getScrollY(), epubView.getHeight() * pageNum);
                                 anim.setDuration(0);
                                 anim.start();
-                                Log.i("o", (size.y)+"<<<<<<<<<<");
-                                Log.i("o", (total/size.y)+"<<<<<<<<<<");
-                                Log.i("i", total+"%%%%%%%%%%");
                             } else if(percent == 1.0) { // 남은 페이지 없으면 다음 챕터로
-                                Log.i("o", percent+"<<<<<<<<<<");
                                 chapter ++;
                                 if(chapter == allPage.size()) { // 책의 맨 마지막 페이지
                                     chapter--;
-                                    if(mToast != null) mToast.cancel();
-                                    mToast = Toast.makeText(getApplicationContext(), "마지막 페이지", Toast.LENGTH_SHORT);
-                                    mToast.show();
+                                    makeToast("마지막 페이지");
                                     return false;
                                 }
 
@@ -199,14 +183,11 @@ public class ViewerActivity extends AppCompatActivity {
                                 try {
                                     content = EpubUtil.getHtmlContent(allPage.get(chapter));
                                 } catch (Exception e) {
-                                    if(mToast != null) mToast.cancel();
-                                    mToast = Toast.makeText(getApplicationContext(), "마지막 페이지", Toast.LENGTH_SHORT);
-                                    mToast.show();
+                                    makeToast("마지막 페이지");
                                 }
                                 epubView.setUp(content);
-                                if(mToast != null) mToast.cancel();
-                                mToast = Toast.makeText(getApplicationContext(), "챕터 "+(chapter - 2), Toast.LENGTH_SHORT);
-                                mToast.show();
+                                changeFont(fontNow);
+                                makeToast("챕터 "+(chapter - 1));
                             }
                             //Log.i("i", "slide<<<<<<<<<<<<<<<<<<<");
                         }
@@ -222,20 +203,17 @@ public class ViewerActivity extends AppCompatActivity {
                                 chapter --;
                                 if(chapter == 1) { // 책의 맨 첫 페이지
                                     chapter++;
-                                    if(mToast != null) mToast.cancel();
-                                    mToast = Toast.makeText(getApplicationContext(), "첫 페이지", Toast.LENGTH_SHORT);
-                                    mToast.show();
+                                    makeToast("첫 페이지");
                                     return false;
                                 }
 
                                 try {
                                     content = EpubUtil.getHtmlContent(allPage.get(chapter));
                                 } catch (Exception e) {
-                                    if(mToast != null) mToast.cancel();
-                                    mToast = Toast.makeText(getApplicationContext(), "첫 페이지", Toast.LENGTH_SHORT);
-                                    mToast.show();
+                                    makeToast("첫 페이지");
                                 }
                                 epubView.setUp(content);
+                                changeFont(fontNow);
                                 epubView.setWebViewClient(new WebViewClient() {
                                     @Override
                                     public void onPageFinished(WebView view, String url) {
@@ -253,11 +231,12 @@ public class ViewerActivity extends AppCompatActivity {
                                                         anim.start();
                                                         page.setText((pageNum+1) + " Page");
                                                     }
-                                                }, 50);
+                                                }, 100);
                                             }
-                                        }, 10);
+                                        }, 100);
                                     }
                                 });
+                                makeToast("챕터 "+(chapter - 1));
                             }
                             //Log.i("i", "slide>>>>>>>>>>>>>>>>>>>");
                         }
@@ -266,6 +245,7 @@ public class ViewerActivity extends AppCompatActivity {
             }
         });
 
+        /* epubView 실시간 스크롤 위치 구하기 */
         epubView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View view, int scrollX, int scrollY, int i2, int i3) {
@@ -299,7 +279,6 @@ public class ViewerActivity extends AppCompatActivity {
 
             }
         });
-
         toup.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -318,7 +297,6 @@ public class ViewerActivity extends AppCompatActivity {
 
             }
         });
-
         fromdown.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -335,7 +313,6 @@ public class ViewerActivity extends AppCompatActivity {
 
             }
         });
-
         todown.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -361,7 +338,7 @@ public class ViewerActivity extends AppCompatActivity {
             }
         });
 
-        /* 글자 설정 */
+        /* 글자 설정 창 Visibility */
         textprop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -376,39 +353,8 @@ public class ViewerActivity extends AppCompatActivity {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {    // 글꼴
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                adapter.setFontEntity(listFont.get(i));
-                adapter.notifyDataSetChanged();
-                try {
-                    content = content.replaceAll("src=\"../", "src=\"" + epubView.getBaseUrl() + "");
-                    content = content.replaceAll("href=\"../", "href=\"" + epubView.getBaseUrl() + "");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    content = "404";
-                }
-                HtmlBuilderModule htmlBuilderModule = new HtmlBuilderModule();
-                HtmlBuilderEntity entity = new HtmlBuilderEntity(
-                        "img{display: inline; height: auto; max-width: 100%;}",
-                        listFont.get(i).getUrl(),
-                        content
-                );
-                epubView.loadDataWithBaseURL(epubView.getBaseUrl(), htmlBuilderModule.getBaseContent(entity), "text/html", "UTF-8", null);
-                epubView.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        final WebView newView = epubView;
-
-                        newView.postDelayed(new Runnable() {
-                            public void run() {
-                                newView.postDelayed(new Runnable() {
-                                    public void run() {
-                                        pageNum = 0;
-                                        page.setText((pageNum+1) + " Page");
-                                    }
-                                }, 50);
-                            }
-                        }, 10);
-                    }
-                });
+                changeFont(i);
+                fontNow = i;
             }
 
             @Override
@@ -476,14 +422,6 @@ public class ViewerActivity extends AppCompatActivity {
             }
         });
 
-        /* 현재 페이지 표시(누르면 페이지 이동) */
-        page.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-
         /* 플로팅 메뉴 */
         comment.setOnClickListener(new View.OnClickListener() { // 댓글창 이동
             @Override
@@ -515,11 +453,6 @@ public class ViewerActivity extends AppCompatActivity {
         copy.setOnClickListener(new View.OnClickListener() { // 링크 복사
             @Override
             public void onClick(View view) {
-                Log.i("i", epubView.getScale()+"scale<<<<<<<<<<");
-                Log.i("i", epubView.getContentHeight()+"ContentHeight<<<<<<<<<<<<<<");
-                Log.i("i", epubView.getScrollY()+"scrollY<<<<<<<<<<<<");
-                Log.i("i", epubView.getHeight()+"height<<<<<<<<<<<<<<<<");
-                Log.i("i", epubView.getContentHeight() * epubView.getScale()+"height<<<<<<<<<<<<<");
             }
         });
     }
@@ -584,13 +517,18 @@ public class ViewerActivity extends AppCompatActivity {
         todown = AnimationUtils.loadAnimation(this, R.anim.translate_todown);
     }
 
+    private void loadFont() {
+        listFont.add(new FontEntity("https://hamedtaherpour.github.io/sample-assets/font/Acme.css", "Acme"));
+        listFont.add(new FontEntity("https://hamedtaherpour.github.io/sample-assets/font/IndieFlower.css", "IndieFlower"));
+        listFont.add(new FontEntity("https://hamedtaherpour.github.io/sample-assets/font/SansitaSwashed.css", "SansitaSwashed"));
+    }
+
     private void loadBook(String book_file_name) {
         try {
-            epubReader = new EpubReaderComponent("/data/data/com.code3.thinkingbookstore/files/verne-an-antarctic-mystery.epub");
+            epubReader = new EpubReaderComponent("/data/data/com.code3.thinkingbookstore/files/"+book_file_name+".epub");
             bookEntity = epubReader.make(this);
         } catch(Exception e) {
-            Log.i("o", "err<<<<<<<<<<<<<<<<");
-
+            makeToast("책 불러오기 실패");
         }
         allPage = bookEntity.getPagePathList();
         adapter = new BookAdapter(allPage, epubReader.getAbsolutePath());
@@ -604,7 +542,10 @@ public class ViewerActivity extends AppCompatActivity {
         }
         epubView.setUp(content);
         page.setText((pageNum+1) + " Page");
+        changeFont(0);
+    }
 
+    private void changeFont(int i) {
         try {
             content = content.replaceAll("src=\"../", "src=\"" + epubView.getBaseUrl() + "");
             content = content.replaceAll("href=\"../", "href=\"" + epubView.getBaseUrl() + "");
@@ -615,11 +556,32 @@ public class ViewerActivity extends AppCompatActivity {
         HtmlBuilderModule htmlBuilderModule = new HtmlBuilderModule();
         HtmlBuilderEntity entity = new HtmlBuilderEntity(
                 "img{display: inline; height: auto; max-width: 100%;}",
-                listFont.get(0).getUrl(),
+                listFont.get(i).getUrl(),
                 content
         );
         epubView.loadDataWithBaseURL(epubView.getBaseUrl(), htmlBuilderModule.getBaseContent(entity), "text/html", "UTF-8", null);
+        epubView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                final WebView newView = epubView;
+
+                newView.postDelayed(new Runnable() {
+                    public void run() {
+                        newView.postDelayed(new Runnable() {
+                            public void run() {
+                                pageNum = 0;
+                                page.setText((pageNum+1) + " Page");
+                            }
+                        }, 50);
+                    }
+                }, 10);
+            }
+        });
     }
 
-    
+    private void makeToast(String msg) {
+        if(mToast != null) mToast.cancel();
+        mToast = Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT);
+        mToast.show();
+    }
 }

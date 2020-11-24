@@ -183,7 +183,8 @@
             android:stateListAnimator="@null"
             android:textAllCaps="false"
             android:text=""
-            android:textSize="30dp"/>
+            android:textSize="30dp"
+            android:focusable="false" />
     </LinearLayout>
 
     <com.github.clans.fab.FloatingActionMenu
