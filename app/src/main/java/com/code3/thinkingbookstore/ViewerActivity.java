@@ -44,6 +44,8 @@ import java.util.Map;
 import io.hamed.htepubreadr.component.EpubReaderComponent;
 import io.hamed.htepubreadr.entity.BookEntity;
 import io.hamed.htepubreadr.entity.FontEntity;
+import io.hamed.htepubreadr.entity.HtmlBuilderEntity;
+import io.hamed.htepubreadr.module.HtmlBuilderModule;
 import io.hamed.htepubreadr.ui.view.EpubView;
 import io.hamed.htepubreadr.util.EpubUtil;
 
@@ -376,6 +378,20 @@ public class ViewerActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 adapter.setFontEntity(listFont.get(i));
                 adapter.notifyDataSetChanged();
+                try {
+                    content = content.replaceAll("src=\"../", "src=\"" + epubView.getBaseUrl() + "");
+                    content = content.replaceAll("href=\"../", "href=\"" + epubView.getBaseUrl() + "");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    content = "404";
+                }
+                HtmlBuilderModule htmlBuilderModule = new HtmlBuilderModule();
+                HtmlBuilderEntity entity = new HtmlBuilderEntity(
+                        "img{display: inline; height: auto; max-width: 100%;}",
+                        listFont.get(i).getUrl(),
+                        content
+                );
+                epubView.loadDataWithBaseURL(epubView.getBaseUrl(), htmlBuilderModule.getBaseContent(entity), "text/html", "UTF-8", null);
             }
 
             @Override
