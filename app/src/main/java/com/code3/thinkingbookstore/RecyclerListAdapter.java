@@ -5,9 +5,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -17,21 +15,18 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class RecyclerHomeAdapter extends RecyclerView.Adapter<RecyclerHomeAdapter.ItemViewHolder>{
-
-    public ArrayList<RecyclerHomeData> listData = new ArrayList<>();
+public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapter.ItemViewHolder>{
+    public ArrayList<RecyclerListData> listData = new ArrayList<>();
     @NonNull
     @Override
-    public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_home_item, parent, false);
-        return new ItemViewHolder(view);
+    public RecyclerListAdapter.ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_list_item, parent, false);
+        return new RecyclerListAdapter.ItemViewHolder(view);
     }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onBindViewHolder(@NonNull RecyclerHomeAdapter.ItemViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerListAdapter.ItemViewHolder holder, int position) {
         holder.onBind(listData.get(position));
     }
 
@@ -40,8 +35,8 @@ public class RecyclerHomeAdapter extends RecyclerView.Adapter<RecyclerHomeAdapte
         return listData.size();
     }
 
-    void addItem(RecyclerHomeData recyclerHomeData) {
-        listData.add(recyclerHomeData);
+    void addItem(RecyclerListData RecyclerListData) {
+        listData.add(RecyclerListData);
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
@@ -49,19 +44,18 @@ public class RecyclerHomeAdapter extends RecyclerView.Adapter<RecyclerHomeAdapte
 
         ItemViewHolder(View itemView) {
             super(itemView);
-
-            contentImageView = itemView.findViewById(R.id.content_image_view);
+            contentImageView = itemView.findViewById(R.id.content_book);
         }
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-        void onBind(RecyclerHomeData listData) {
+        void onBind(RecyclerListData listData) {
             Glide.with(itemView).load(listData.getImageView()).into(contentImageView);
             contentImageView.setClipToOutline(true);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(itemView.getContext(), BoradItemActivity.class);
-                    intent.putExtra("postIdx", listData.getPostIdx());
+                    Intent intent = new Intent(itemView.getContext(), MainActivity.class);
+                    intent.putExtra("bookIdx", listData.getBookIdx());
                     itemView.getContext().startActivity(intent);
                 }
             });
