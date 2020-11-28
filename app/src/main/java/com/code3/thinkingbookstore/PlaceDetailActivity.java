@@ -8,6 +8,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -50,6 +51,10 @@ public class PlaceDetailActivity extends AppCompatActivity {
         newpage = new BookDescrip();
         bindView();
         setFirebase();
+
+    }
+
+    public void gotoReview(View v) {
 
     }
 
