@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null) {  // 로그인 안되어있으면
+        if(user == null) {  // 로그인 안되어있으면
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else {    // 로그인 되어있으면
 
