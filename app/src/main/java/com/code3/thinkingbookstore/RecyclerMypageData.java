@@ -1,15 +1,21 @@
 package com.code3.thinkingbookstore;
 
-public class RecyclerListData {
+import android.net.Uri;
+
+import java.net.URL;
+
+public class RecyclerMypageData {
     private String imageView;
     private int bookIdx;
+    private String oneReview;
 
-    public RecyclerListData(){
+    public RecyclerMypageData(){
 
     }
-    public RecyclerListData(String imageView,int bookIdx){
+    public RecyclerMypageData(String imageView,int bookIdx,String oneReview){
         this.imageView=imageView;
         this.bookIdx=bookIdx;
+        this.oneReview=oneReview;
     }
 
 
@@ -18,4 +24,7 @@ public class RecyclerListData {
 
     public int getBookIdx(){return bookIdx;}
     public void setBookIdx(int bookIdx){this.bookIdx=bookIdx;}
+
+    public String getOneReview(){return oneReview;}
+    public void setOneReview(String oneReview){this.oneReview=oneReview;}
 }
