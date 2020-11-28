@@ -1,5 +1,6 @@
 package com.code3.thinkingbookstore;
 
+import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -52,8 +55,16 @@ public class RecyclerHomeAdapter extends RecyclerView.Adapter<RecyclerHomeAdapte
 
         @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         void onBind(RecyclerHomeData listData) {
-            contentImageView.setImageResource(listData.getImageView());
+            Glide.with(itemView).load(listData.getImageView()).into(contentImageView);
             contentImageView.setClipToOutline(true);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(itemView.getContext(), BoradItemActivity.class);
+                    intent.putExtra("postIdx", listData.getPostIdx());
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
     }
 }
