@@ -89,7 +89,6 @@ public class ViewerActivity extends AppCompatActivity {
     float contentHeight;
     float total;
     float percent = 0;
-    String bookIdx;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -97,14 +96,13 @@ public class ViewerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
-
-        String bookIdx = getIntent().getStringExtra("bookIdx");
+        String bookName = getIntent().getStringExtra("bookname");
 
         bindView();
 
         /* 책 불러오기 */
         loadFont();
-        loadBook(bookIdx);
+        loadBook(bookName);
 
         /* epubView 화면 터치 설정 */
         epubView.setOnTouchListener(new View.OnTouchListener() {

@@ -54,7 +54,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
 
-        bookIdx = ""+2;
+        bookIdx = ""+4;
         newpage = new BookDescrip();
         bindView();
         setFirebase();
@@ -81,7 +81,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PlaceDetailActivity.this, ViewerActivity.class);
-                intent.putExtra("bookIdx", bookIdx);
+                intent.putExtra("bookname", bookname.getText());
                 startActivity(intent);
             }
         });
