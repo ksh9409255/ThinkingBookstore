@@ -3,6 +3,7 @@ package com.code3.thinkingbookstore;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -35,7 +36,8 @@ import java.io.BufferedReader;
 public class PlaceDetailActivity extends AppCompatActivity {
     private TextView likenum, hatenum, bookname, author;
     private ImageView bookcover;
-    private ImageButton likebtn, hatebtn;
+    private ImageButton likebtn, hatebtn, backbtn;
+    private Button read;
     ExpandableTextView expTv1, expTv2;
 
     FirebaseUser user;
@@ -53,7 +55,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_place_detail);
 
         bookIdx = ""+2;
-        name_book = "Cranford";
         newpage = new BookDescrip();
         bindView();
         setFirebase();
@@ -75,6 +76,22 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 displayNumberOfHates(bookIdx, user.getUid());
             }
         });
+
+        read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PlaceDetailActivity.this, ViewerActivity.class);
+                intent.putExtra("bookIdx", bookIdx);
+                startActivity(intent);
+            }
+        });
+
+        backbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 
     public void displayNumberOfHates(String bookId, String currentUserId){
@@ -91,7 +108,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     //Populate numOfHates on post i.e. textView.setText(""+numOfHates)
                     //This is to check if the user has liked the post or not
                     hatenum.setText(""+numOfHates);
-                    Log.i("i", hatenum+"<<<<<<<<<<<<<<<<<<<");
                     hatebtn.setSelected(dataSnapshot.hasChild(currentUserId));
                 }
             }
@@ -211,7 +227,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         rootRef = firebaseDatabase.getReference();
         loadBookDescrip();
-        Log.i("i", user.getUid()+"<<<<<<<<<<<<"+user.getEmail());
     }
 
     public void loadBookDescrip() {
@@ -300,7 +315,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
         }
     }
 
-
     public void bindView() {
         likenum = (TextView)findViewById(R.id.likenum);
         hatenum = (TextView)findViewById(R.id.hatenum);
@@ -309,6 +323,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
         bookcover = (ImageView)findViewById(R.id.bookcover_descrip);
         likebtn = (ImageButton)findViewById(R.id.like_descrip);
         hatebtn = (ImageButton)findViewById(R.id.hate_descrip);
+        backbtn = (ImageButton)findViewById(R.id.backbtn_descrip);
+        read = (Button)findViewById(R.id.read_descrip);
 
         ((TextView)findViewById(R.id.sample1).findViewById(R.id.title)).setText("책 소개");
         ((TextView)findViewById(R.id.sample2).findViewById(R.id.title)).setText("저자 소개");

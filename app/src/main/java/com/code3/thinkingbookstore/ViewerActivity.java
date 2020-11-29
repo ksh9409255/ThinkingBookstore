@@ -89,6 +89,7 @@ public class ViewerActivity extends AppCompatActivity {
     float contentHeight;
     float total;
     float percent = 0;
+    String bookIdx;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -96,13 +97,14 @@ public class ViewerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewer);
 
-        String bookName = getIntent().getStringExtra("bookname");
+
+        String bookIdx = getIntent().getStringExtra("bookIdx");
 
         bindView();
 
         /* 책 불러오기 */
         loadFont();
-        loadBook("verne-an-antarctic-mystery");
+        loadBook(bookIdx);
 
         /* epubView 화면 터치 설정 */
         epubView.setOnTouchListener(new View.OnTouchListener() {
