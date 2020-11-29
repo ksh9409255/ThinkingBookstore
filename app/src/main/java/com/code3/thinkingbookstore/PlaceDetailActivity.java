@@ -221,9 +221,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 for(DataSnapshot postSnapshot: snapshot.getChildren()) {
                     String key = postSnapshot.getKey();
                     BookDescrip mypage = postSnapshot.getValue(BookDescrip.class);
-                    if(key.equals(name_book)) {
+                    if(key.equals(bookIdx)) {
                         setBookcover(mypage.getBookcover());
-                        bookname.setText(key);
+                        bookname.setText(mypage.getName());
                         author.setText(mypage.getAuthor());
                         expTv1.setText(mypage.getDescription());
                         expTv2.setText(mypage.getAuthor_descrip());
@@ -246,6 +246,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         public String author_descrip;
         public String bookcover;
         public String description;
+        public String name;
 
         public void setAuthor(String author) {
             this.author = author;
@@ -261,6 +262,10 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         public void setDescription(String description) {
             this.description = description;
+        }
+
+        public void setName(String name) {
+            this.name = name;
         }
 
         public String getAuthor() {
@@ -279,14 +284,19 @@ public class PlaceDetailActivity extends AppCompatActivity {
             return description;
         }
 
+        public String getName() {
+            return name;
+        }
+
         public BookDescrip() {
         }
 
-        public BookDescrip(String author, String author_descrip, String bookcover, String description) {
+        public BookDescrip(String author, String author_descrip, String bookcover, String description, String name) {
             this.author = author;
             this.author_descrip = author_descrip;
             this.bookcover = bookcover;
             this.description = description;
+            this.name = name;
         }
     }
 
