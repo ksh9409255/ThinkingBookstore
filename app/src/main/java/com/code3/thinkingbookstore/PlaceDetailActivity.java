@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -43,75 +45,81 @@ public class PlaceDetailActivity extends AppCompatActivity {
     DatabaseReference rootRef;
     BookDescrip newpage;
     String name_book;
+    String bookIdx;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
 
+        bookIdx = ""+2;
         name_book = "Cranford";
         newpage = new BookDescrip();
         bindView();
         setFirebase();
+        displayNumberOfLikes(bookIdx, user.getUid());
 
         likebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference upvotesRef = rootRef.child("book_descrip/Allan_and_the_Ice_Gods");
-                upvotesRef.runTransaction(new Transaction.Handler() {
-                    @Override
-                    public Transaction.Result doTransaction(MutableData mutableData) {
-                        Like currentValue = mutableData.getValue(Like.class);
-                        if (currentValue == null) {
-                            return Transaction.success(mutableData);
-                        } else {
-                            Log.i("i", "sdfsfdfsdfsdfsdfsdf");
-                            mutableData.setValue(currentValue);
-
-                        }
-                        //likenum.setText(currentValue);
-
-                        return Transaction.success(mutableData);
-                    }
-
-                    @Override
-                    public void onComplete(
-                            DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
-                        System.out.println("Transaction completed");
-                    }
-                });
+                onLikeClicked(likebtn, bookIdx, user.getUid());
+                displayNumberOfLikes(bookIdx, user.getUid());
             }
         });
     }
 
-    @IgnoreExtraProperties
-    static public class Like {
-        public String user;
-        public int num;
+    public void displayNumberOfLikes(String bookId, String currentUserId){
+        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId);
+        likesRef.addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    long numOfLikes = 0;
+                    if(dataSnapshot.hasChild("likes")){
+                        numOfLikes = dataSnapshot.child("likes").getValue(Long.class);
+                    }
 
-        public String getUser() {
-            return user;
-        }
+                    //Populate numOfLikes on post i.e. textView.setText(""+numOfLikes)
+                    //This is to check if the user has liked the post or not
+                    likenum.setText(""+numOfLikes);
+                    likebtn.setSelected(dataSnapshot.hasChild(currentUserId));
+                }
+            }
 
-        public void setUser(String user) {
-            this.user = user;
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        public void setNum(int num) {
-            this.num = num;
-        }
+            }
+        });
+    }
 
-        public int getNum() {
-            return num;
-        }
+    public void onLikeClicked(View v, String bookId, String userId){
+        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId).child("likes");
+        DatabaseReference uidRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId).child(userId);
+        likesRef.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long numLikes = 0;
+                if(dataSnapshot.exists()){
+                    numLikes = dataSnapshot.getValue(Long.class);
+                }
+                if(likebtn.isSelected()){
+                    //If already liked then user wants to unlike the post
+                    likesRef.setValue(numLikes-1);
+                    uidRef.removeValue();
 
-        public Like() {
-        }
+                } else {
+                    //If not liked already then user wants to like the post
+                    likesRef.setValue(numLikes+1);
+                    uidRef.setValue(userId);
+                }
+            }
 
-        public Like(String user, int num) {
-            this.user = user;
-            this.num = num;
-        }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void gotoReview(View v) {
@@ -131,10 +139,11 @@ public class PlaceDetailActivity extends AppCompatActivity {
     }
 
     public void setFirebase() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         rootRef = firebaseDatabase.getReference();
         loadBookDescrip();
-
+        Log.i("i", user.getUid()+"<<<<<<<<<<<<"+user.getEmail());
     }
 
     public void loadBookDescrip() {
