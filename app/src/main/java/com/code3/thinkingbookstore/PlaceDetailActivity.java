@@ -58,6 +58,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         bindView();
         setFirebase();
         displayNumberOfLikes(bookIdx, user.getUid());
+        displayNumberOfHates(bookIdx, user.getUid());
 
         likebtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,10 +67,75 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 displayNumberOfLikes(bookIdx, user.getUid());
             }
         });
+
+        hatebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onHateClicked(hatebtn, bookIdx, user.getUid());
+                displayNumberOfHates(bookIdx, user.getUid());
+            }
+        });
+    }
+
+    public void displayNumberOfHates(String bookId, String currentUserId){
+        DatabaseReference hatesRef = FirebaseDatabase.getInstance().getReference().child("book_hate").child(bookId+"_hates");
+        hatesRef.addValueEventListener(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    long numOfHates = 0;
+                    if(dataSnapshot.hasChild("hates")){
+                        numOfHates = dataSnapshot.child("hates").getValue(Long.class);
+                    }
+
+                    //Populate numOfHates on post i.e. textView.setText(""+numOfHates)
+                    //This is to check if the user has liked the post or not
+                    hatenum.setText(""+numOfHates);
+                    Log.i("i", hatenum+"<<<<<<<<<<<<<<<<<<<");
+                    hatebtn.setSelected(dataSnapshot.hasChild(currentUserId));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void onHateClicked(View v, String bookId, String userId){
+        DatabaseReference hatesRef = FirebaseDatabase.getInstance().getReference().child("book_hate").child(bookId+"_hates").child("hates");
+        DatabaseReference uidRef = FirebaseDatabase.getInstance().getReference().child("book_hate").child(bookId+"_hates").child(userId);
+        hatesRef.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                long numHates = 0;
+                if(dataSnapshot.exists()){
+                    numHates = dataSnapshot.getValue(Long.class);
+                }
+                if(hatebtn.isSelected()){
+                    //If already liked then user wants to unlike the post
+                    hatesRef.setValue(numHates-1);
+                    uidRef.removeValue();
+                    likebtn.setEnabled(true);
+
+                } else {
+                    //If not liked already then user wants to like the post
+                    hatesRef.setValue(numHates+1);
+                    uidRef.setValue(userId);
+                    likebtn.setEnabled(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void displayNumberOfLikes(String bookId, String currentUserId){
-        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId);
+        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId+"_likes");
         likesRef.addValueEventListener(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -94,8 +160,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
     }
 
     public void onLikeClicked(View v, String bookId, String userId){
-        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId).child("likes");
-        DatabaseReference uidRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId).child(userId);
+        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId+"_likes").child("likes");
+        DatabaseReference uidRef = FirebaseDatabase.getInstance().getReference().child("book_like").child(bookId+"_likes").child(userId);
         likesRef.addListenerForSingleValueEvent(new ValueEventListener(){
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -107,11 +173,13 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     //If already liked then user wants to unlike the post
                     likesRef.setValue(numLikes-1);
                     uidRef.removeValue();
+                    hatebtn.setEnabled(true);
 
                 } else {
                     //If not liked already then user wants to like the post
                     likesRef.setValue(numLikes+1);
                     uidRef.setValue(userId);
+                    likebtn.setEnabled(false);
                 }
             }
 
