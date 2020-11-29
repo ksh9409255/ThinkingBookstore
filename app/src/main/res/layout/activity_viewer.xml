@@ -241,7 +241,7 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_content_copy_24"
             app:fab_size="mini"
-            app:fab_label="링크 복사" />
+            app:fab_label="진행률" />
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/darkmode_viewer"
             app:fab_colorNormal="#000000"
@@ -261,6 +261,6 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_baseline_comment_24"
             app:fab_size="mini"
-            app:fab_label="댓글" />
+            app:fab_label="리뷰" />
     </com.github.clans.fab.FloatingActionMenu>
 </FrameLayout>
