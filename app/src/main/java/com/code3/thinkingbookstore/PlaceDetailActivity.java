@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -52,6 +54,64 @@ public class PlaceDetailActivity extends AppCompatActivity {
         bindView();
         setFirebase();
 
+        likebtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatabaseReference upvotesRef = rootRef.child("book_descrip/Allan_and_the_Ice_Gods");
+                upvotesRef.runTransaction(new Transaction.Handler() {
+                    @Override
+                    public Transaction.Result doTransaction(MutableData mutableData) {
+                        Like currentValue = mutableData.getValue(Like.class);
+                        if (currentValue == null) {
+                            return Transaction.success(mutableData);
+                        } else {
+                            Log.i("i", "sdfsfdfsdfsdfsdfsdf");
+                            mutableData.setValue(currentValue);
+
+                        }
+                        //likenum.setText(currentValue);
+
+                        return Transaction.success(mutableData);
+                    }
+
+                    @Override
+                    public void onComplete(
+                            DatabaseError databaseError, boolean committed, DataSnapshot dataSnapshot) {
+                        System.out.println("Transaction completed");
+                    }
+                });
+            }
+        });
+    }
+
+    @IgnoreExtraProperties
+    static public class Like {
+        public String user;
+        public int num;
+
+        public String getUser() {
+            return user;
+        }
+
+        public void setUser(String user) {
+            this.user = user;
+        }
+
+        public void setNum(int num) {
+            this.num = num;
+        }
+
+        public int getNum() {
+            return num;
+        }
+
+        public Like() {
+        }
+
+        public Like(String user, int num) {
+            this.user = user;
+            this.num = num;
+        }
     }
 
     public void gotoReview(View v) {
@@ -74,7 +134,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         rootRef = firebaseDatabase.getReference();
         loadBookDescrip();
-        Log.i("o", newpage.getBookcover()+"><>>>>>>>>>>>>>><<<<<<>>>>>>>>>");
 
     }
 
