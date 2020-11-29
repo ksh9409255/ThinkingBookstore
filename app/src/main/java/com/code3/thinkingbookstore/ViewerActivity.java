@@ -102,7 +102,7 @@ public class ViewerActivity extends AppCompatActivity {
 
         /* 책 불러오기 */
         loadFont();
-        loadBook("verne-an-antarctic-mystery");
+        loadBook(bookName);
 
         /* epubView 화면 터치 설정 */
         epubView.setOnTouchListener(new View.OnTouchListener() {
