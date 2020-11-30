@@ -70,6 +70,10 @@ public class BoradItemActivity extends AppCompatActivity {
                         homeData.setImageView((String)snapshot.getValue());
                         Glide.with(view).load(homeData.getImageView()).into(contentBorad);
                     }
+                    else if(cnt==3){
+                        homeData.setUserName((String)snapshot.getValue());
+                        userName.setText(homeData.getUserName());
+                    }
                     else if(cnt==4){
                         homeData.setWriter((String)snapshot.getValue());
                         writerName.setText(homeData.getWriter());

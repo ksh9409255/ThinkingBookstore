@@ -44,8 +44,6 @@ public class MypageFragment extends Fragment {
     private TextView userEmail;
     private Button logOut;
 
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-    StorageReference rootRef = firebaseStorage.getReference("bookcover");
     FirebaseUser user;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,8 +52,9 @@ public class MypageFragment extends Fragment {
         userName = (TextView)view.findViewById(R.id.text_username);
         userEmail = (TextView)view.findViewById(R.id.text_userid);
         logOut = (Button)view.findViewById(R.id.btn_logout);
+        user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference("mypage");
+        DatabaseReference databaseReference = database.getReference(user.getDisplayName());
         logOut.setOnClickListener(l->{
             FirebaseAuth mAuth ;
             mAuth = FirebaseAuth.getInstance();
@@ -63,7 +62,6 @@ public class MypageFragment extends Fragment {
             startActivity(new Intent(getContext(), LoginActivity.class));
         });
         DataInit(view,databaseReference);
-        user = FirebaseAuth.getInstance().getCurrentUser();
         userName.setText(user.getDisplayName()+"님 반갑습니다!");
         userEmail.setText(user.getEmail());
         return view;
