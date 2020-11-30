@@ -440,7 +440,11 @@ public class ViewerActivity extends AppCompatActivity {
         comment.setOnClickListener(new View.OnClickListener() { // 댓글창 이동
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(ViewerActivity.this, ReviewActivity.class);
+                intent.putExtra("bookname", getIntent().getStringExtra("bookname"));
+                intent.putExtra("bookCover", getIntent().getStringExtra("coverimage"));
+                intent.putExtra("bookIdx", getIntent().getStringExtra("bookIdx"));
+                startActivity(intent);
             }
         });
 

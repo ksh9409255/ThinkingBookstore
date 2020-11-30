@@ -232,7 +232,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
     }
 
     public void gotoReview(View v) {
-        Intent intent = new Intent(PlaceDetailActivity.this, ViewerActivity.class);
+        Intent intent = new Intent(PlaceDetailActivity.this, ReviewActivity.class);
         intent.putExtra("bookname", bookname.getText());
         intent.putExtra("bookCover", coverimage.getText());
         intent.putExtra("bookIdx", bookIdx);
