@@ -60,7 +60,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_place_detail);
 
         Intent intent = getIntent();
-        bookIdx = ""+9;//intent.getExtras().getString("bookIdx");
+        bookIdx = intent.getExtras().getString("bookIdx");
 
         newpage = new BookDescrip();
         bindView();
