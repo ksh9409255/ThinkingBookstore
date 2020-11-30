@@ -42,13 +42,60 @@
         app:layout_constraintTop_toBottomOf="@+id/review_toolbar" />
 
     <EditText
+        android:id="@+id/editText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:background="@drawable/edit_text_rec"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
         android:hint="한줄 리뷰를 작성해주세요."
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_review_detail"
         tools:ignore="MissingConstraints" />
+    <Button
+        android:id="@+id/btn_review_back"
+        android:layout_width="16dp"
+        android:layout_height="26dp"
+        android:background="@drawable/back"
+        app:layout_constraintBottom_toBottomOf="@+id/review_toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="10dp"
+        tools:ignore="MissingConstraints" />
+    <Button
+        android:id="@+id/btn_review_reg"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="#6200EE"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:layout_marginTop="10dp"
+        android:text="리뷰 등록하기"
+        android:textColor="#EAEAEA"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText" />
+
+    <TextView
+        android:id="@+id/text_review_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:text="한 줄 리뷰"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_review_reg" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_review_list"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="#F0F0F0"
+        android:layout_marginTop="410dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
