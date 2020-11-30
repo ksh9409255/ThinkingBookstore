@@ -28,18 +28,30 @@
         app:layout_constraintEnd_toEndOf="@+id/review_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/review_toolbar" />
+    <TextView
+        android:id="@+id/text_review_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="유저1님"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_toolbar" />
 
     <TextView
         android:id="@+id/text_review_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/nanum_barun_gothic_bold"
         android:layout_marginLeft="10dp"
-        android:text="유저 1님\n한 줄 리뷰를 작성해보세요"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:text="한 줄 리뷰를 작성해보세요"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/review_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/text_review_user" />
 
     <EditText
         android:id="@+id/editText"
