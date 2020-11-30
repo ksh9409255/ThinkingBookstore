@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,29 +28,31 @@ public class ReviewActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
 
     private TextView textReviewDetail;
+    private TextView userNameView;
     private EditText reviewEdit;
     private Button btnAdapt;
     private Button btnBack;
-    private int bookIdx;
+    private String bookIdx;
     private String bookCover;
-
+    private String review;
     FirebaseUser user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         textReviewDetail = (TextView)findViewById(R.id.text_review_detail);
+        userNameView = (TextView)findViewById(R.id.text_review_user);
         reviewEdit = (EditText)findViewById(R.id.editText);
         btnAdapt = (Button)findViewById(R.id.btn_review_reg);
         btnBack = (Button)findViewById(R.id.btn_review_back);
 
-        bookIdx = getIntent().getIntExtra("bookIdx",-1);
+        bookIdx = getIntent().getStringExtra("bookIdx");
         bookCover = getIntent().getStringExtra("bookCover");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference("review_list").child(String.valueOf(bookIdx));
+        user = FirebaseAuth.getInstance().getCurrentUser();
         DataInit(this,databaseReference);
-
-        String review = reviewEdit.getText().toString().trim();
+        userNameView.setText(user.getDisplayName()+" 님!");
         btnBack.setOnClickListener(l->{
             finish();
         });
@@ -57,10 +60,12 @@ public class ReviewActivity extends AppCompatActivity {
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference rootRef = firebaseDatabase.getReference();
             user = FirebaseAuth.getInstance().getCurrentUser();
+            review = reviewEdit.getText().toString().trim();
             RecyclerReviewData reviewData = new RecyclerReviewData(user.getDisplayName(), String.valueOf(System.currentTimeMillis()), review);
-            RecyclerMypageData mypageData = new RecyclerMypageData(bookCover,bookIdx,review);
-            rootRef.child("review_list").child(String.valueOf(bookIdx)).push().setValue(reviewData);
+            RecyclerMypageData mypageData = new RecyclerMypageData(bookCover,Integer.parseInt(String.valueOf(bookIdx)),review);
+            rootRef.child("review_list").child(bookIdx).push().setValue(reviewData);
             rootRef.child(user.getDisplayName()).push().setValue(mypageData);
+            Toast.makeText(this,"리뷰 등록이 완료되었습니다!",Toast.LENGTH_SHORT).show();
         });
     }
     private void DataInit(ReviewActivity view,DatabaseReference databaseReference){
@@ -80,23 +85,21 @@ public class ReviewActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int cnt = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    RecyclerReviewData recyclerReviewData = new RecyclerReviewData();
                     for(DataSnapshot ds : snapshot.getChildren()){
-                        RecyclerReviewData recyclerReviewData = new RecyclerReviewData();
-                        for(DataSnapshot ds1 : ds.getChildren()) {
-                            if(cnt==0){
-                                recyclerReviewData.setUserName((String)ds1.getValue());
-                            }
-                            else if(cnt==1){
-                                recyclerReviewData.setDate((String)ds1.getValue());
-                            }
-                            else if(cnt==2){
-                                recyclerReviewData.setContent((String)ds1.getValue());
-                            }
-                            cnt++;
+                        if(cnt==0){
+                            recyclerReviewData.setContent((String)ds.getValue());
                         }
-                        cnt=0;
-                        adapter.listData.add(recyclerReviewData);
+                        else if(cnt==1){
+                            recyclerReviewData.setDate((String)ds.getValue());
+                        }
+                        else if(cnt==2){
+                            recyclerReviewData.setUserName((String)ds.getValue());
+                        }
+                        cnt++;
                     }
+                    cnt=0;
+                    adapter.listData.add(recyclerReviewData);
                 }
                 adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침해야 반영이 됨
             }

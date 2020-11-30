@@ -87,10 +87,10 @@ public class MypageFragment extends Fragment {
                     RecyclerMypageData mypageData = new RecyclerMypageData(); // 반복문으로 데이터 List를 추출해냄
                     for(DataSnapshot ds : snapshot.getChildren()){
                         if(cnt==0){
-                            mypageData.setImageView((String)ds.getValue());
+                            mypageData.setBookIdx(Integer.parseInt(String.valueOf(ds.getValue())));
                         }
                         else if(cnt==1){
-                            mypageData.setBookIdx(Integer.parseInt(String.valueOf(ds.getValue())));
+                            mypageData.setImageView((String)ds.getValue());
                         }
                         else if(cnt==2){
                             mypageData.setOneReview((String)ds.getValue());
