@@ -1,5 +1,6 @@
 package com.code3.thinkingbookstore;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -13,11 +14,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,16 +40,30 @@ public class MypageFragment extends Fragment {
     private RecyclerView recyclerViewOnereview;
     private RecyclerMypageAdapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
-    StorageReference rootRef = firebaseStorage.getReference("bookcover");
+    private TextView userName;
+    private TextView userEmail;
+    private Button logOut;
+
+    FirebaseUser user;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mypage, container, false);
-
+        userName = (TextView)view.findViewById(R.id.text_username);
+        userEmail = (TextView)view.findViewById(R.id.text_userid);
+        logOut = (Button)view.findViewById(R.id.btn_logout);
+        user = FirebaseAuth.getInstance().getCurrentUser();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference("mypage");
+        DatabaseReference databaseReference = database.getReference(user.getDisplayName());
+        logOut.setOnClickListener(l->{
+            FirebaseAuth mAuth ;
+            mAuth = FirebaseAuth.getInstance();
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getContext(), LoginActivity.class));
+        });
         DataInit(view,databaseReference);
+        userName.setText(user.getDisplayName()+"님 반갑습니다!");
+        userEmail.setText(user.getEmail());
         return view;
     }
     private void DataInit(View view,DatabaseReference databaseReference){

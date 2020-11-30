@@ -54,7 +54,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(itemView.getContext(), MainActivity.class);
+                    Intent intent = new Intent(itemView.getContext(), PlaceDetailActivity.class);
                     intent.putExtra("bookIdx", listData.getBookIdx());
                     itemView.getContext().startActivity(intent);
                 }
