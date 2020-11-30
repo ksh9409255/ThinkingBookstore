@@ -5,6 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/bookcover_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <Button
         android:id="@+id/read_descrip"
         android:layout_width="match_parent"
@@ -127,7 +133,7 @@
                 android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:onClick="gotoReview"
-                android:layout_marginBottom="40dp">
+                android:layout_marginBottom="60dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="36dp"

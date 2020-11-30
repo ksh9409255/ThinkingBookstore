@@ -563,10 +563,10 @@ public class ViewerActivity extends AppCompatActivity {
         try {
             epubReader = new EpubReaderComponent("/data/data/com.code3.thinkingbookstore/files/"+book_file_name+".epub");
             bookEntity = epubReader.make(this);
+            allPage = bookEntity.getPagePathList();
         } catch(Exception e) {
             makeToast("책 불러오기 실패");
         }
-        allPage = bookEntity.getPagePathList();
         adapter = new BookAdapter(allPage, epubReader.getAbsolutePath());
         epubView = (EpubView)findViewById(R.id.epub_view);
         epubView.setVerticalScrollBarEnabled(false);

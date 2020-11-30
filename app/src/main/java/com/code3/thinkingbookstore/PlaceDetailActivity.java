@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,14 +29,17 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 
 public class PlaceDetailActivity extends AppCompatActivity {
-    private TextView likenum, hatenum, bookname, author;
+    private TextView likenum, hatenum, bookname, author, coverimage;
     private ImageView bookcover;
     private ImageButton likebtn, hatebtn, backbtn;
     private Button read;
@@ -54,7 +59,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
 
-        bookIdx = ""+4;
+        Intent intent = getIntent();
+        bookIdx = ""+9;//intent.getExtras().getString("bookIdx");
+
         newpage = new BookDescrip();
         bindView();
         setFirebase();
@@ -80,9 +87,29 @@ public class PlaceDetailActivity extends AppCompatActivity {
         read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(PlaceDetailActivity.this, ViewerActivity.class);
-                intent.putExtra("bookname", bookname.getText());
-                startActivity(intent);
+                StorageReference pathReference = storage.getReference().child("epubfiles/"+bookname.getText()+".epub");
+                File localFile = null;
+                //localFile = File.createTempFile(bookname.getText().toString(), ".epub");
+                localFile = new File("/data/data/com.code3.thinkingbookstore/files", bookname.getText().toString()+".epub");
+                //localFile.deleteOnExit();
+
+                pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                        // Local temp file has been created
+                        Intent intent = new Intent(PlaceDetailActivity.this, ViewerActivity.class);
+                        intent.putExtra("bookname", bookname.getText());
+                        intent.putExtra("bookCover", coverimage.getText());
+                        intent.putExtra("bookIdx", bookIdx);
+                        startActivity(intent);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle any errors
+                    }
+                });
+
             }
         });
 
@@ -130,13 +157,11 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     numHates = dataSnapshot.getValue(Long.class);
                 }
                 if(hatebtn.isSelected()){
-                    //If already liked then user wants to unlike the post
                     hatesRef.setValue(numHates-1);
                     uidRef.removeValue();
                     likebtn.setEnabled(true);
 
                 } else {
-                    //If not liked already then user wants to like the post
                     hatesRef.setValue(numHates+1);
                     uidRef.setValue(userId);
                     likebtn.setEnabled(false);
@@ -207,7 +232,11 @@ public class PlaceDetailActivity extends AppCompatActivity {
     }
 
     public void gotoReview(View v) {
-
+        Intent intent = new Intent(PlaceDetailActivity.this, ViewerActivity.class);
+        intent.putExtra("bookname", bookname.getText());
+        intent.putExtra("bookCover", coverimage.getText());
+        intent.putExtra("bookIdx", bookIdx);
+        startActivity(intent);
     }
 
     public void setBookcover(String Url) {
@@ -242,6 +271,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                         author.setText(mypage.getAuthor());
                         expTv1.setText(mypage.getDescription());
                         expTv2.setText(mypage.getAuthor_descrip());
+                        coverimage.setText(mypage.getBookcover());
                     }
                 }
             }
@@ -320,6 +350,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         hatenum = (TextView)findViewById(R.id.hatenum);
         bookname = (TextView)findViewById(R.id.bookname_descrip);
         author = (TextView)findViewById(R.id.author_descrip);
+        coverimage = (TextView)findViewById(R.id.bookcover_save);
         bookcover = (ImageView)findViewById(R.id.bookcover_descrip);
         likebtn = (ImageButton)findViewById(R.id.like_descrip);
         hatebtn = (ImageButton)findViewById(R.id.hate_descrip);

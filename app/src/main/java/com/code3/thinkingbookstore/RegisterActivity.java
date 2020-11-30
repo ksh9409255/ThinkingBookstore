@@ -34,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         newid = (EditText)findViewById(R.id.newid);
         newpw = (EditText)findViewById(R.id.newpw);
+        newnick = (EditText)findViewById(R.id.newnick);
         imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         morphBtn = (Button)findViewById(R.id.morphBtn);
         mAuth = FirebaseAuth.getInstance();
@@ -53,7 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                            .setDisplayName("Jane Q. User")
+                                            .setDisplayName(newnick.getText().toString().trim())
                                             .build();
 
                                     user.updateProfile(profileUpdates)
