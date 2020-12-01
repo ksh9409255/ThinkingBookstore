@@ -189,6 +189,7 @@ public class ViewerActivity extends AppCompatActivity {
                                         epubView.getScrollY(), epubView.getHeight() * pageNum);
                                 anim.setDuration(0);
                                 anim.start();
+                                copy.setLabelText(String.format("%.0f", percent * 100)+"%");
                             } else if(percent == 1.0) { // 남은 페이지 없으면 다음 챕터로
                                 chapter ++;
                                 if(chapter == allPage.size()) { // 책의 맨 마지막 페이지
@@ -208,6 +209,7 @@ public class ViewerActivity extends AppCompatActivity {
                                 changeFont(fontNow);
                                 chnow.setText("/Ch"+(chapter-1));
                                 makeToast("챕터 "+(chapter - 1));
+                                copy.setLabelText("0%");
                             }
                             //Log.i("i", "slide<<<<<<<<<<<<<<<<<<<");
                         }
@@ -219,6 +221,7 @@ public class ViewerActivity extends AppCompatActivity {
                                         epubView.getScrollY(), epubView.getHeight() * pageNum);
                                 anim.setDuration(0);
                                 anim.start();
+                                copy.setLabelText(String.format("%.0f", percent * 100)+"%");
                             } else if(percent == 0.0) { // 앞에 남은 페이지 없으면 전 챕터로
                                 chapter --;
                                 if(chapter == 1) { // 책의 맨 첫 페이지
@@ -258,6 +261,7 @@ public class ViewerActivity extends AppCompatActivity {
                                 });
                                 chnow.setText("/Ch"+(chapter-1));
                                 makeToast("챕터 "+(chapter - 1));
+                                copy.setLabelText("100%");
                             }
                             //Log.i("i", "slide>>>>>>>>>>>>>>>>>>>");
                         }
@@ -478,6 +482,9 @@ public class ViewerActivity extends AppCompatActivity {
         copy.setOnClickListener(new View.OnClickListener() { // 링크 복사
             @Override
             public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                String pasteData = ("<font color = '#FF0000'>"+"@Ch"+chapter+"_"+String.format("%.0f", percent * 100)+"%</font>");
+                clipboard.setPrimaryClip(ClipData.newPlainText("label", pasteData));
             }
         });
     }

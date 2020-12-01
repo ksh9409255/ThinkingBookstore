@@ -63,6 +63,7 @@ public class LikedSentenceActivity extends AppCompatActivity {
             }
         });
 
+        back = (ImageButton)findViewById(R.id.backbtn_liked);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
