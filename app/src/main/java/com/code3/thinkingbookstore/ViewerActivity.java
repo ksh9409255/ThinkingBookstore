@@ -41,6 +41,13 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -502,12 +509,34 @@ public class ViewerActivity extends AppCompatActivity {
                             new ValueCallback<String>() {
                                 @Override
                                 public void onReceiveValue(String value) {
-                                    Log.i("i", value+"<<<<<<<<<<<<<<<<<<<");
+                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                    onLikeClicked(value, getIntent().getStringExtra("bookIdx"), user.getDisplayName());
+                                    makeToast("좋아요 완료");
+                                    //Log.i("i", value+"<<<<<<<<<<<<<<<<<<<");
                                 }
                             });
                     return true;
                 });
         super.onActionModeStarted(mode);
+    }
+
+    public void onLikeClicked(String sentence, String bookId, String userId){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = firebaseDatabase.getReference();
+
+        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("sentence_like").child(bookId).child(sentence);
+        likesRef.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    //If not liked already then user wants to like the post
+                    likesRef.setValue(userId);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
     
     public void viewerOnClick(View v) {
