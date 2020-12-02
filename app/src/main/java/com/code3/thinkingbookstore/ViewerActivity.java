@@ -41,6 +41,13 @@ import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -182,6 +189,7 @@ public class ViewerActivity extends AppCompatActivity {
                                         epubView.getScrollY(), epubView.getHeight() * pageNum);
                                 anim.setDuration(0);
                                 anim.start();
+                                copy.setLabelText(String.format("%.0f", percent * 100)+"%");
                             } else if(percent == 1.0) { // 남은 페이지 없으면 다음 챕터로
                                 chapter ++;
                                 if(chapter == allPage.size()) { // 책의 맨 마지막 페이지
@@ -201,6 +209,7 @@ public class ViewerActivity extends AppCompatActivity {
                                 changeFont(fontNow);
                                 chnow.setText("/Ch"+(chapter-1));
                                 makeToast("챕터 "+(chapter - 1));
+                                copy.setLabelText("0%");
                             }
                             //Log.i("i", "slide<<<<<<<<<<<<<<<<<<<");
                         }
@@ -212,6 +221,7 @@ public class ViewerActivity extends AppCompatActivity {
                                         epubView.getScrollY(), epubView.getHeight() * pageNum);
                                 anim.setDuration(0);
                                 anim.start();
+                                copy.setLabelText(String.format("%.0f", percent * 100)+"%");
                             } else if(percent == 0.0) { // 앞에 남은 페이지 없으면 전 챕터로
                                 chapter --;
                                 if(chapter == 1) { // 책의 맨 첫 페이지
@@ -251,6 +261,7 @@ public class ViewerActivity extends AppCompatActivity {
                                 });
                                 chnow.setText("/Ch"+(chapter-1));
                                 makeToast("챕터 "+(chapter - 1));
+                                copy.setLabelText("100%");
                             }
                             //Log.i("i", "slide>>>>>>>>>>>>>>>>>>>");
                         }
@@ -471,6 +482,9 @@ public class ViewerActivity extends AppCompatActivity {
         copy.setOnClickListener(new View.OnClickListener() { // 링크 복사
             @Override
             public void onClick(View view) {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                String pasteData = ("<font color = '#FF0000'>"+"@Ch"+chapter+"_"+String.format("%.0f", percent * 100)+"%</font>");
+                clipboard.setPrimaryClip(ClipData.newPlainText("label", pasteData));
             }
         });
     }
@@ -502,12 +516,34 @@ public class ViewerActivity extends AppCompatActivity {
                             new ValueCallback<String>() {
                                 @Override
                                 public void onReceiveValue(String value) {
-                                    Log.i("i", value+"<<<<<<<<<<<<<<<<<<<");
+                                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                    onLikeClicked(value, getIntent().getStringExtra("bookIdx"), user.getDisplayName());
+                                    makeToast("좋아요 완료");
+                                    //Log.i("i", value+"<<<<<<<<<<<<<<<<<<<");
                                 }
                             });
                     return true;
                 });
         super.onActionModeStarted(mode);
+    }
+
+    public void onLikeClicked(String sentence, String bookId, String userId){
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = firebaseDatabase.getReference();
+
+        DatabaseReference likesRef = FirebaseDatabase.getInstance().getReference().child("sentence_like").child(bookId).child(sentence);
+        likesRef.addListenerForSingleValueEvent(new ValueEventListener(){
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                    //If not liked already then user wants to like the post
+                    likesRef.setValue(userId);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
     
     public void viewerOnClick(View v) {

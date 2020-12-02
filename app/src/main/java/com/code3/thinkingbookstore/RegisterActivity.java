@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -25,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
     private InputMethodManager imm;
     private Button morphBtn;
     private FirebaseAuth mAuth;
+    private String newID, newPW, newNICK;
     Toast nToast;
 
     @Override
@@ -42,11 +45,54 @@ public class RegisterActivity extends AppCompatActivity {
         morphBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String newID = newid.getText().toString().trim();
-                String newPW = newpw.getText().toString().trim();
-                Log.i("i", newID);
+                //String newID; =
+                //String newPW; =
+                //Log.i("i", newID);
 
-                mAuth.createUserWithEmailAndPassword(newID, newPW)
+                try {
+                    newID = newid.getText().toString().trim();
+                    newPW = newpw.getText().toString().trim();
+                    newNICK = newnick.getText().toString().trim();
+
+                    mAuth.createUserWithEmailAndPassword(newID, newPW)
+                            .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if(task.isSuccessful()) {
+                                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                                .setDisplayName(newNICK)
+                                                .build();
+
+                                        user.updateProfile(profileUpdates)
+                                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<Void> task) {
+                                                        if (task.isSuccessful()) {
+                                                            Log.d("d", "User profile updated.");
+                                                        }
+                                                    }
+                                                });
+                                        if(nToast != null) nToast.cancel();
+                                        nToast = Toast.makeText(getApplicationContext(), "회원가입 성공", Toast.LENGTH_SHORT);
+                                        nToast.show();
+                                        finish();
+                                        overridePendingTransition(0, 0);
+                                    } else {
+                                        if(nToast != null) nToast.cancel();
+                                        nToast = Toast.makeText(getApplicationContext(), "회원가입 실패", Toast.LENGTH_SHORT);
+                                        nToast.show();
+                                    }
+                                }
+                            });
+                } catch(Exception e) {
+                    if(nToast != null) nToast.cancel();
+                    nToast = Toast.makeText(getApplicationContext(), "모든 항목을 입력해주세요", Toast.LENGTH_SHORT);
+                    nToast.show();
+                }
+
+                /*mAuth.createUserWithEmailAndPassword(newID, newPW)
                         .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
@@ -54,7 +100,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                            .setDisplayName(newnick.getText().toString().trim())
+                                            .setDisplayName(newNICK)
                                             .build();
 
                                     user.updateProfile(profileUpdates)
@@ -77,7 +123,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     nToast.show();
                                 }
                             }
-                        });
+                        });*/
             }
         });
     }

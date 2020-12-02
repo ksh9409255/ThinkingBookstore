@@ -136,6 +136,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     //This is to check if the user has liked the post or not
                     hatenum.setText(""+numOfHates);
                     hatebtn.setSelected(dataSnapshot.hasChild(currentUserId));
+                    likebtn.setEnabled(!dataSnapshot.hasChild(currentUserId));
                 }
             }
 
@@ -190,6 +191,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     //This is to check if the user has liked the post or not
                     likenum.setText(""+numOfLikes);
                     likebtn.setSelected(dataSnapshot.hasChild(currentUserId));
+                    hatebtn.setEnabled(!dataSnapshot.hasChild(currentUserId));
                 }
             }
 
@@ -220,7 +222,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     //If not liked already then user wants to like the post
                     likesRef.setValue(numLikes+1);
                     uidRef.setValue(userId);
-                    likebtn.setEnabled(false);
+                    hatebtn.setEnabled(false);
                 }
             }
 
