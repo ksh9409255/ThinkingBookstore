@@ -6,14 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,6 +46,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
     private ImageView bookcover;
     private ImageButton likebtn, hatebtn, backbtn;
     private Button read;
+    private ScrollView scroll;
     ExpandableTextView expTv1, expTv2;
 
     FirebaseUser user;
@@ -117,6 +121,19 @@ public class PlaceDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        scroll.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int scrollViewPos = scroll.getScrollY();
+                int TextView_lines = scroll.getChildAt(0).getBottom() - scroll.getHeight();
+                if(TextView_lines == scrollViewPos) {
+                    read.setBackgroundColor(Color.parseColor("#F6D300"));
+                } else {
+                    read.setBackgroundColor(Color.parseColor("#50F6D300"));
+                }
             }
         });
     }
@@ -358,6 +375,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         hatebtn = (ImageButton)findViewById(R.id.hate_descrip);
         backbtn = (ImageButton)findViewById(R.id.backbtn_descrip);
         read = (Button)findViewById(R.id.read_descrip);
+        scroll = (ScrollView)findViewById(R.id.scroll_descip);
 
         ((TextView)findViewById(R.id.sample1).findViewById(R.id.title)).setText("책 소개");
         ((TextView)findViewById(R.id.sample2).findViewById(R.id.title)).setText("저자 소개");
