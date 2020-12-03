@@ -37,7 +37,7 @@ public class LikedSentenceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_liked_sentence);
 
         if(!calledAlready) {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            FirebaseDatabase.getInstance();
             calledAlready = true;
         }
 

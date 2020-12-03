@@ -5,7 +5,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
@@ -13,15 +12,11 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.ContextMenu;
-import android.view.GestureDetector;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -30,10 +25,12 @@ import android.webkit.ValueCallback;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -49,12 +46,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.hamed.htepubreadr.component.EpubReaderComponent;
 import io.hamed.htepubreadr.entity.BookEntity;
@@ -97,6 +90,14 @@ public class ViewerActivity extends AppCompatActivity {
     float total;
     float percent = 0;
 
+    private boolean isChBarOpen = false;
+    private Animation fromleft, toleft;
+    private LinearLayout chbar;
+    private ImageButton chbackbtn;
+    private ListView chapterList;
+    private ArrayList<String> chapters = new ArrayList<String>();
+    private ArrayAdapter<String> madapter;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,27 @@ public class ViewerActivity extends AppCompatActivity {
         /* 책 불러오기 */
         loadFont();
         loadBook(bookName);
+
+        madapter = new ArrayAdapter<String>(this, R.layout.chapter_listitem, chapters);
+        chapterList.setAdapter(madapter);
+        chapterList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                pageNum = 0;
+                page.setText((pageNum+1) + " Page");
+                chapter = i + 2;
+                try {
+                    content = EpubUtil.getHtmlContent(allPage.get(chapter));
+                } catch (Exception e) {
+                    makeToast("마지막 페이지");
+                }
+                epubView.setUp(content);
+                changeFont(fontNow);
+                chnow.setText("/Ch"+(chapter-1));
+                makeToast("챕터 "+(chapter - 1));
+                copy.setLabelText("0%");
+            }
+        });
 
         /* epubView 화면 터치 설정 */
         epubView.setOnTouchListener(new View.OnTouchListener() {
@@ -150,6 +172,10 @@ public class ViewerActivity extends AppCompatActivity {
 
                             if(textproperties.getVisibility() == View.VISIBLE) {
                                 textproperties.setVisibility(View.GONE);
+                            }
+
+                            if(isChBarOpen) {
+                                chbar.startAnimation(toleft);
                             }
                         }
                         else if (fingerState == FINGER_DRAGGING) fingerState = FINGER_RELEASED;
@@ -354,6 +380,40 @@ public class ViewerActivity extends AppCompatActivity {
 
             }
         });
+        fromleft.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                chbar.setVisibility(View.VISIBLE);
+                isChBarOpen = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        toleft.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                chbar.setVisibility(View.GONE);
+                isChBarOpen = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
 
         /* 뒤로가기 버튼 */
         backbtn.setOnClickListener(new View.OnClickListener() {
@@ -423,27 +483,31 @@ public class ViewerActivity extends AppCompatActivity {
             }
         });
 
-        /* 북마크 */
+        /* 동영상 검색 */
         bookmark.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chapter = allPage.size() - 1;
-                try {
-                    content = EpubUtil.getHtmlContent(allPage.get(chapter));
-                } catch (Exception e) {
-                    if(mToast != null) mToast.cancel();
-                    mToast = Toast.makeText(getApplicationContext(), "마지막 페이지", Toast.LENGTH_SHORT);
-                    mToast.show();
-                }
-                epubView.setUp(content);
+                Intent intent = new Intent(ViewerActivity.this, VideoActivity.class);
+                intent.putExtra("bookname", getIntent().getStringExtra("bookname"));
+                startActivity(intent);
             }
         });
 
-        /* 책갈피 이동 */
+        /* 목차 */
         list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(isChBarOpen) {
+                    chbar.startAnimation(toleft);
+                } else {
+                    chbar.startAnimation(fromleft);
+                }
+            }
+        });
+        chbackbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chbar.startAnimation(toleft);
             }
         });
 
@@ -591,6 +655,12 @@ public class ViewerActivity extends AppCompatActivity {
         toup = AnimationUtils.loadAnimation(this, R.anim.translate_toup);
         fromdown = AnimationUtils.loadAnimation(this, R.anim.translate_fromdown);
         todown = AnimationUtils.loadAnimation(this, R.anim.translate_todown);
+        fromleft = AnimationUtils.loadAnimation(this, R.anim.translate_fromleft);
+        toleft = AnimationUtils.loadAnimation(this, R.anim.translate_toleft);
+
+        chbar = (LinearLayout)findViewById(R.id.drawer_viewer);
+        chbackbtn = (ImageButton)findViewById(R.id.backbtn_chlist);
+        chapterList = (ListView)findViewById(R.id.chapter_list);
     }
 
     private void loadFont() {
@@ -620,6 +690,12 @@ public class ViewerActivity extends AppCompatActivity {
         page.setText((pageNum+1) + " Page");
         chnow.setText("/Ch"+(chapter-1));
         changeFont(0);
+
+        for(int i=2; i<allPage.size(); i++) {
+            Log.i("i", i+"<<<<<<<<<<<<<<<<<<");
+            chapters.add(new String("Chapter "+(i-1)));
+        }
+        //madapter.notifyDataSetChanged();
     }
 
     private void changeFont(int i) {
