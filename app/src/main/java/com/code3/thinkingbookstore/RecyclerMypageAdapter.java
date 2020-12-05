@@ -57,6 +57,7 @@ public class RecyclerMypageAdapter extends RecyclerView.Adapter<RecyclerMypageAd
         void onBind(RecyclerMypageData listData) {
             Glide.with(itemView).load(listData.getImageView()).into(contentImageView);
             review.setText(listData.getOneReview());
+            date.setText(listData.getDate());
             contentImageView.setClipToOutline(true);
         }
     }

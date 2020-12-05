@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ReviewActivity extends AppCompatActivity {
     private RecyclerView recyclerViewReview;
     private RecyclerReviewAdapter adapter;
@@ -32,6 +36,8 @@ public class ReviewActivity extends AppCompatActivity {
     private EditText reviewEdit;
     private Button btnAdapt;
     private Button btnBack;
+    private Button btnGoodSent;
+
     private String bookIdx;
     private String bookCover;
     private String review;
@@ -45,6 +51,7 @@ public class ReviewActivity extends AppCompatActivity {
         reviewEdit = (EditText)findViewById(R.id.editText);
         btnAdapt = (Button)findViewById(R.id.btn_review_reg);
         btnBack = (Button)findViewById(R.id.btn_review_back);
+        btnGoodSent = (Button)findViewById(R.id.btn_good_sent);
 
         bookIdx = getIntent().getStringExtra("bookIdx");
         bookCover = getIntent().getStringExtra("bookCover");
@@ -57,15 +64,24 @@ public class ReviewActivity extends AppCompatActivity {
             finish();
         });
         btnAdapt.setOnClickListener(l->{
+            SimpleDateFormat format1 = new SimpleDateFormat ( "yyyy-MM-dd");
+            Date time = new Date();
+            String time1 = format1.format(time);
             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
             DatabaseReference rootRef = firebaseDatabase.getReference();
             user = FirebaseAuth.getInstance().getCurrentUser();
             review = reviewEdit.getText().toString().trim();
-            RecyclerReviewData reviewData = new RecyclerReviewData(user.getDisplayName(), String.valueOf(System.currentTimeMillis()), review);
-            RecyclerMypageData mypageData = new RecyclerMypageData(bookCover,Integer.parseInt(String.valueOf(bookIdx)),review);
+            RecyclerReviewData reviewData = new RecyclerReviewData(user.getDisplayName(), time1, review);
+            RecyclerMypageData mypageData = new RecyclerMypageData(bookCover,Integer.parseInt(String.valueOf(bookIdx)),review,time1);
             rootRef.child("review_list").child(bookIdx).push().setValue(reviewData);
             rootRef.child(user.getDisplayName()).push().setValue(mypageData);
             Toast.makeText(this,"리뷰 등록이 완료되었습니다!",Toast.LENGTH_SHORT).show();
+            this.recreate();
+        });
+        btnGoodSent.setOnClickListener(l->{
+            Intent intent = new Intent(this,LikedSentenceActivity.class);
+            intent.putExtra("bookIdx",bookIdx);
+            startActivity(intent);
         });
     }
     private void DataInit(ReviewActivity view,DatabaseReference databaseReference){

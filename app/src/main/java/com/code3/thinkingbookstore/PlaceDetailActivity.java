@@ -61,7 +61,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         bookIdx = intent.getExtras().getString("bookIdx");
-
+        Log.e("인덱스",String.valueOf(bookIdx));
         newpage = new BookDescrip();
         bindView();
         setFirebase();
@@ -89,9 +89,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
             public void onClick(View view) {
                 StorageReference pathReference = storage.getReference().child("epubfiles/"+bookname.getText()+".epub");
                 File localFile = null;
-                //localFile = File.createTempFile(bookname.getText().toString(), ".epub");
                 localFile = new File("/data/data/com.code3.thinkingbookstore/files", bookname.getText().toString()+".epub");
-                //localFile.deleteOnExit();
 
                 pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
