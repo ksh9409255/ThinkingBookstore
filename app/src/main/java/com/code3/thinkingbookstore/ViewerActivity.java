@@ -82,6 +82,7 @@ public class ViewerActivity extends AppCompatActivity {
     private List<FontEntity> listFont = new ArrayList<>();
     private Context context = this;
     private int fontNow = 0;
+    private int colorNow = 0;
     private int pageNum = 0;
     private int scrollLen;
     private int totalPage;
@@ -90,8 +91,6 @@ public class ViewerActivity extends AppCompatActivity {
     float total;
     float percent = 0;
 
-    private boolean isChBarOpen = false;
-    private Animation fromleft, toleft;
     private LinearLayout chbar;
     private ImageButton chbackbtn;
     private ListView chapterList;
@@ -126,7 +125,23 @@ public class ViewerActivity extends AppCompatActivity {
                     makeToast("마지막 페이지");
                 }
                 epubView.setUp(content);
-                changeFont(fontNow);
+                epubView.setWebViewClient(new WebViewClient() {
+                    @Override
+                    public void onPageFinished(WebView view, String url) {
+                        final WebView newView = epubView;
+
+                        newView.postDelayed(new Runnable() {
+                            public void run() {
+                                newView.postDelayed(new Runnable() {
+                                    public void run() {
+                                        changeTextColor(colorNow);
+                                    }
+                                }, 10);
+                            }
+                        }, 10);
+                    }
+                });
+                changeTextColor(colorNow);
                 chnow.setText("/Ch"+(chapter-1));
                 makeToast("챕터 "+(chapter - 1));
                 copy.setLabelText("0%");
@@ -174,8 +189,8 @@ public class ViewerActivity extends AppCompatActivity {
                                 textproperties.setVisibility(View.GONE);
                             }
 
-                            if(isChBarOpen) {
-                                chbar.startAnimation(toleft);
+                            if(chbar.getVisibility() == View.VISIBLE) {
+                                chbar.setVisibility(View.GONE);
                             }
                         }
                         else if (fingerState == FINGER_DRAGGING) fingerState = FINGER_RELEASED;
@@ -231,8 +246,24 @@ public class ViewerActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     makeToast("마지막 페이지");
                                 }
-                                epubView.setUp(content);
                                 changeFont(fontNow);
+                                epubView.setUp(content);
+                                epubView.setWebViewClient(new WebViewClient() {
+                                    @Override
+                                    public void onPageFinished(WebView view, String url) {
+                                        final WebView newView = epubView;
+
+                                        newView.postDelayed(new Runnable() {
+                                            public void run() {
+                                                newView.postDelayed(new Runnable() {
+                                                    public void run() {
+                                                        changeTextColor(colorNow);
+                                                    }
+                                                }, 10);
+                                            }
+                                        }, 10);
+                                    }
+                                });
                                 chnow.setText("/Ch"+(chapter-1));
                                 makeToast("챕터 "+(chapter - 1));
                                 copy.setLabelText("0%");
@@ -262,7 +293,6 @@ public class ViewerActivity extends AppCompatActivity {
                                     makeToast("첫 페이지");
                                 }
                                 epubView.setUp(content);
-                                changeFont(fontNow);
                                 epubView.setWebViewClient(new WebViewClient() {
                                     @Override
                                     public void onPageFinished(WebView view, String url) {
@@ -279,6 +309,7 @@ public class ViewerActivity extends AppCompatActivity {
                                                         anim.setDuration(0);
                                                         anim.start();
                                                         page.setText((pageNum+1) + " Page");
+                                                        changeTextColor(colorNow);
                                                     }
                                                 }, 100);
                                             }
@@ -291,6 +322,7 @@ public class ViewerActivity extends AppCompatActivity {
                             }
                             //Log.i("i", "slide>>>>>>>>>>>>>>>>>>>");
                         }
+                        changeTextColor(colorNow);
                 }
                 return false;
             }
@@ -380,40 +412,6 @@ public class ViewerActivity extends AppCompatActivity {
 
             }
         });
-        fromleft.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-                chbar.setVisibility(View.VISIBLE);
-                isChBarOpen = true;
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-        toleft.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                chbar.setVisibility(View.GONE);
-                isChBarOpen = false;
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
 
         /* 뒤로가기 버튼 */
         backbtn.setOnClickListener(new View.OnClickListener() {
@@ -451,6 +449,7 @@ public class ViewerActivity extends AppCompatActivity {
         spinner2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {   // 글자 색
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                colorNow = i;
                 switch(i) {
                     case 0 : epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"black\");"); break;
                     case 1 : epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"white\");"); break;
@@ -497,17 +496,17 @@ public class ViewerActivity extends AppCompatActivity {
         list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(isChBarOpen) {
-                    chbar.startAnimation(toleft);
+                if(chbar.getVisibility() == View.VISIBLE) {
+                    chbar.setVisibility(View.GONE);
                 } else {
-                    chbar.startAnimation(fromleft);
+                    chbar.setVisibility(View.VISIBLE);
                 }
             }
         });
         chbackbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chbar.startAnimation(toleft);
+                chbar.setVisibility(View.GONE);
             }
         });
 
@@ -531,6 +530,7 @@ public class ViewerActivity extends AppCompatActivity {
                     epubCard.setBackgroundColor(Color.WHITE);
                     epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"black\");");
                     spinner2.setSelection(0);
+                    colorNow = 0;
                     isDarkmodeOn = false;
                 } else {
                     epubView.setBackgroundColor(Color.BLACK);
@@ -538,6 +538,7 @@ public class ViewerActivity extends AppCompatActivity {
                     epubView.getSettings().setJavaScriptEnabled(true);
                     epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"white\");");
                     spinner2.setSelection(1);
+                    colorNow = 1;
                     isDarkmodeOn = true;
                 }
             }
@@ -547,7 +548,7 @@ public class ViewerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                String pasteData = ("<font color = '#FF0000'>"+"@Ch"+chapter+"_"+String.format("%.0f", percent * 100)+"%</font>");
+                String pasteData = ("<font color = '#6200EE'>"+"@Ch"+chapter+"_"+String.format("%.0f", percent * 100)+"%</font>");
                 clipboard.setPrimaryClip(ClipData.newPlainText("label", pasteData));
             }
         });
@@ -655,8 +656,6 @@ public class ViewerActivity extends AppCompatActivity {
         toup = AnimationUtils.loadAnimation(this, R.anim.translate_toup);
         fromdown = AnimationUtils.loadAnimation(this, R.anim.translate_fromdown);
         todown = AnimationUtils.loadAnimation(this, R.anim.translate_todown);
-        fromleft = AnimationUtils.loadAnimation(this, R.anim.translate_fromleft);
-        toleft = AnimationUtils.loadAnimation(this, R.anim.translate_toleft);
 
         chbar = (LinearLayout)findViewById(R.id.drawer_viewer);
         chbackbtn = (ImageButton)findViewById(R.id.backbtn_chlist);
@@ -730,6 +729,17 @@ public class ViewerActivity extends AppCompatActivity {
                 }, 10);
             }
         });
+    }
+
+    private void changeTextColor(int i) {
+        Log.e("sdlk", i+"");
+        switch(i) {
+            case 0 : epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"black\");"); break;
+            case 1 : epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"white\");"); break;
+            case 2 : epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"green\");"); break;
+            case 3 : epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"blue\");"); break;
+            case 4 : epubView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"red\");"); break;
+        }
     }
 
     private void makeToast(String msg) {

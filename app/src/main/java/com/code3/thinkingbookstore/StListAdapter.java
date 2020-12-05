@@ -43,8 +43,6 @@ public class StListAdapter extends BaseAdapter {
         TextView likeduser = (TextView)listView.findViewById(R.id.liked_user);
         TextView likedst = (TextView)listView.findViewById(R.id.liked_sentence);
 
-        Log.i("i", i+"<<<<<<<<<<<<<<<<<<<<");
-        Log.i("i", "<<<<<<<<<<<"+sentence.get(0).getUser());
         likeduser.setText(sentence.get(i).getUser());
         likedst.setText(sentence.get(i).getSt());
         return listView;
