@@ -1,6 +1,7 @@
 package com.code3.thinkingbookstore;
 
 import android.os.Build;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +57,7 @@ public class RecyclerReviewAdapter extends RecyclerView.Adapter<RecyclerReviewAd
         void onBind(RecyclerReviewData listData) {
             userName.setText(listData.getUserName()+"님");
             date.setText(listData.getDate());
-            content.setText(listData.getcontent());
+            content.setText(Html.fromHtml(listData.getcontent()));
         }
     }
 }

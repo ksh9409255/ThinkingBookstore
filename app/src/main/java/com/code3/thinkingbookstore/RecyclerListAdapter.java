@@ -2,6 +2,7 @@ package com.code3.thinkingbookstore;
 
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,7 @@ public class RecyclerListAdapter extends RecyclerView.Adapter<RecyclerListAdapte
                 public void onClick(View view) {
                     Intent intent = new Intent(itemView.getContext(), PlaceDetailActivity.class);
                     intent.putExtra("bookIdx", String.valueOf(listData.getBookIdx()));
+                    Log.e("인덱스",String.valueOf(listData.getBookIdx()));
                     itemView.getContext().startActivity(intent);
                 }
             });

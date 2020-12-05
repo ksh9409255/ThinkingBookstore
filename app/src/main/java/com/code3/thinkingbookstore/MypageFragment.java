@@ -90,9 +90,12 @@ public class MypageFragment extends Fragment {
                             mypageData.setBookIdx(Integer.parseInt(String.valueOf(ds.getValue())));
                         }
                         else if(cnt==1){
-                            mypageData.setImageView((String)ds.getValue());
+                            mypageData.setDate((String)ds.getValue());
                         }
                         else if(cnt==2){
+                            mypageData.setImageView((String)ds.getValue());
+                        }
+                        else if(cnt==3){
                             mypageData.setOneReview((String)ds.getValue());
                         }
                         cnt++;
