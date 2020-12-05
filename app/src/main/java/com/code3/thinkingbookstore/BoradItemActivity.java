@@ -64,7 +64,7 @@ public class BoradItemActivity extends AppCompatActivity {
             public void onClick(View view){
                 StorageReference pathReference = storage.getReference().child("post/" + "sample_image" + ".png");
                 File localFile = null;
-                localFile = new File("/storage/self/primary/Pictures" +"sample_image" + ".png");
+                localFile = new File("/storage/self/primary/Pictures/" +"sample_image" + ".png");
                 pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
