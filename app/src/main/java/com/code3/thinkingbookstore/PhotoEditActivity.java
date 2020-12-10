@@ -65,6 +65,14 @@ public class PhotoEditActivity extends AppCompatActivity {
                 mPhotoEditor.addText("sldf", Color.BLUE);
             }
         });
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                makeToast("편집 취소");
+                finish();
+            }
+        });
     }
 
     private void bindView() {

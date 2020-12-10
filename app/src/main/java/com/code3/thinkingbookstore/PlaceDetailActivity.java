@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -48,6 +49,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
     private Button read;
     private ScrollView scroll;
     ExpandableTextView expTv1, expTv2;
+    Drawable likealpha, hatealpha;
 
     FirebaseUser user;
     FirebaseStorage storage;
@@ -176,11 +178,13 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     hatesRef.setValue(numHates-1);
                     uidRef.removeValue();
                     likebtn.setEnabled(true);
+                    likealpha.setAlpha(255);
 
                 } else {
                     hatesRef.setValue(numHates+1);
                     uidRef.setValue(userId);
                     likebtn.setEnabled(false);
+                    likealpha.setAlpha(80);
                 }
             }
 
@@ -232,12 +236,13 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     likesRef.setValue(numLikes-1);
                     uidRef.removeValue();
                     hatebtn.setEnabled(true);
-
+                    hatealpha.setAlpha(255);
                 } else {
                     //If not liked already then user wants to like the post
                     likesRef.setValue(numLikes+1);
                     uidRef.setValue(userId);
                     hatebtn.setEnabled(false);
+                    hatealpha.setAlpha(80);
                 }
             }
 
@@ -374,6 +379,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
         backbtn = (ImageButton)findViewById(R.id.backbtn_descrip);
         read = (Button)findViewById(R.id.read_descrip);
         scroll = (ScrollView)findViewById(R.id.scroll_descip);
+        likealpha = ((ImageButton)findViewById(R.id.like_descrip)).getDrawable();
+        hatealpha = ((ImageButton)findViewById(R.id.hate_descrip)).getDrawable();
 
         ((TextView)findViewById(R.id.sample1).findViewById(R.id.title)).setText("책 소개");
         ((TextView)findViewById(R.id.sample2).findViewById(R.id.title)).setText("저자 소개");

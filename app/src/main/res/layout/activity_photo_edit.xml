@@ -97,13 +97,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="편집할 글자를 꾹 눌러주세요"
+            android:text="편집할 글자를 꾹 눌러 선택"
             android:textColor="#FFFFFF"
             android:textSize="25dp"
             android:background="#F3111111" />
     </FrameLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"

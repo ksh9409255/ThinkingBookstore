@@ -548,7 +548,8 @@ public class ViewerActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                String pasteData = ("<font color = '#6200EE'>"+"@Ch"+chapter+"_"+String.format("%.0f", percent * 100)+"%</font>");
+                //String pasteData = ("<font color = '#6200EE'>"+"@Ch"+chapter+"_"+String.format("%.0f", percent * 100)+"%</font>");
+                String pasteData = ("@Ch"+chapter+"_"+String.format("%.0f", percent * 100)+"%");
                 clipboard.setPrimaryClip(ClipData.newPlainText("label", pasteData));
             }
         });

@@ -2,6 +2,7 @@ package com.code3.thinkingbookstore;
 
 import android.os.Build;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,17 @@ public class RecyclerReviewAdapter extends RecyclerView.Adapter<RecyclerReviewAd
         void onBind(RecyclerReviewData listData) {
             userName.setText(listData.getUserName()+"님");
             date.setText(listData.getDate());
-            content.setText(Html.fromHtml(listData.getcontent()));
+            String temp = listData.getcontent();
+            try {
+                String piece0 = temp.substring(0, temp.indexOf("@"));
+                String piece1 = temp.substring(temp.indexOf("@"), temp.indexOf("%")+1);
+                String piece2 = temp.substring(temp.indexOf("%") + 1);
+
+                temp =  piece0 + "<font color = '#6200EE'>" + piece1 + "</font>" + piece2;
+            } catch(RuntimeException e) {
+                Log.e("error", "runtime err");
+            }
+            content.setText(Html.fromHtml(temp));
         }
     }
 }
