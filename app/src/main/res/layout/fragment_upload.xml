@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <androidx.appcompat.widget.Toolbar
@@ -26,4 +27,95 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/home_toolbar" />
 
+    <ImageView
+        android:id="@+id/upload_content_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/empty"
+        app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/upload_pic_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="사진 편집"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_content_image_view"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/upload_edit_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/edit_text_rec"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:layout_marginTop="10dp"
+        android:hint="문구를 입력해주세요."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_pic_edit"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/upload_book_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:text="책제목 : "
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_edit_detail"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/upload_book_name_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:hint="책이름을 입력해주세요"
+        app:layout_constraintBottom_toBottomOf="@+id/upload_book_name"
+        app:layout_constraintStart_toEndOf="@+id/upload_book_name"
+        app:layout_constraintTop_toTopOf="@+id/upload_book_name"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/upload_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:text="작가 : "
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/upload_book_name"
+        tools:ignore="MissingConstraints" />
+
+    <EditText
+        android:id="@+id/upload_writer_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
+        android:hint="작가를 입력해주세요"
+        app:layout_constraintBottom_toBottomOf="@+id/upload_writer"
+        app:layout_constraintStart_toEndOf="@+id/upload_writer"
+        app:layout_constraintTop_toTopOf="@+id/upload_writer"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/btn_upload"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="게시물 올리기"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="MissingConstraints" />
 </androidx.constraintlayout.widget.ConstraintLayout>
