@@ -56,7 +56,7 @@ public class HomeFragment extends Fragment {
                 int cnt = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     RecyclerHomeData homeData = new RecyclerHomeData(); // 반복문으로 데이터 List를 추출해냄
-                    homeData.setPostIdx(Integer.parseInt((String)snapshot.getKey()));
+                    homeData.setPostIdx(snapshot.getKey());
                     for(DataSnapshot ds : snapshot.getChildren()){
                         if(cnt==0){
                             homeData.setBookName((String)ds.getValue());

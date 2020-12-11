@@ -36,7 +36,7 @@ public class BoradItemActivity extends AppCompatActivity {
     TextView bookIntro;
 
     FirebaseStorage storage;
-    private int postIdx;
+    private String postIdx;
     RecyclerHomeData homeData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,9 @@ public class BoradItemActivity extends AppCompatActivity {
         writerName = (TextView)findViewById(R.id.text_borad_bookwriter);
         bookName = (TextView)findViewById(R.id.text_borad_bookname);
         bookIntro = (TextView)findViewById(R.id.text_borad_source);
-        postIdx = getIntent().getIntExtra("postIdx",-1);
+        postIdx = getIntent().getStringExtra("postIdx");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference("post_list").child(String.valueOf(postIdx));
+        DatabaseReference databaseReference = database.getReference("post_list").child(postIdx);
         storage = FirebaseStorage.getInstance();
         homeData=new RecyclerHomeData();
         getData(this,databaseReference);
