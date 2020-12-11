@@ -2,7 +2,11 @@ package com.code3.thinkingbookstore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,10 +26,10 @@ import java.util.ArrayList;
 
 public class GetSentence1Activity extends AppCompatActivity {
     private ImageButton back;
-    private ListView listView;
     ArrayList<Books> bookList;
+    RecyclerView mRecyclerView;
     static boolean calledAlready = false;
-    BookListAdapter myAdapter;
+    BookListAdapter mAdapter;
     TextView text1, text2;
 
     @Override
@@ -34,7 +38,6 @@ public class GetSentence1Activity extends AppCompatActivity {
         setContentView(R.layout.activity_get_sentence1);
 
         back = (ImageButton)findViewById(R.id.backbtn_list1);
-        listView = (ListView)findViewById(R.id.list_list1);
         text1 = new TextView(this);
         text2 = new TextView(this);
 
@@ -44,8 +47,16 @@ public class GetSentence1Activity extends AppCompatActivity {
         }
 
         bookList = new ArrayList<Books>();
-        myAdapter = new BookListAdapter(this, bookList);
-        listView.setAdapter(myAdapter);
+        mRecyclerView = (RecyclerView)findViewById(R.id.list_list1);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        mAdapter = new BookListAdapter(bookList);
+        mRecyclerView.setAdapter(mAdapter);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                mLinearLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
 
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         ValueEventListener valueEventListener = new ValueEventListener() {
@@ -55,8 +66,8 @@ public class GetSentence1Activity extends AppCompatActivity {
                     String key = postSnapshot.getKey();
                     PlaceDetailActivity.BookDescrip mypage = postSnapshot.getValue(PlaceDetailActivity.BookDescrip.class);
                     bookList.add(new Books(mypage.getBookcover(), mypage.getName()));
-                    myAdapter.notifyDataSetChanged();
-                    Log.e("name, imagepath", key+"??"+mypage.getBookcover()+"//"+mypage.getName());
+                    mAdapter.notifyDataSetChanged();
+                    //Log.e("name, imagepath", key+"??"+mypage.getBookcover()+"//"+mypage.getName());
                 }
             }
 
@@ -72,6 +83,19 @@ public class GetSentence1Activity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                finish();
+            }
+        });
+
+        //BookListAdapter nadapter = new BookListAdapter(bookList);
+        mAdapter.setOnItemClickListener(new BookListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int pos) {
+                Intent intent = getIntent();
+                intent.putExtra("bookIdx", pos + 2);
+                intent.setClass(GetSentence1Activity.this, GetSentence2Activity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+                startActivity(intent);
                 finish();
             }
         });

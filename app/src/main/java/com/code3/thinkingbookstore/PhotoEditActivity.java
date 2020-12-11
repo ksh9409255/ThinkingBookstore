@@ -33,6 +33,7 @@ public class PhotoEditActivity extends AppCompatActivity {
     private Toast mToast;
 
     private static final int REQUEST_CODE = 0;
+    private static final int REQUEST_CODE_SENTENCE = 1;
     PhotoEditor mPhotoEditor;
     PhotoEditorView mPhoto;
     private String text;
@@ -62,7 +63,9 @@ public class PhotoEditActivity extends AppCompatActivity {
         getSen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPhotoEditor.addText("sldf", Color.BLUE);
+                //mPhotoEditor.addText("sldf", Color.BLUE);
+                Intent intent = new Intent(PhotoEditActivity.this, GetSentence1Activity.class);
+                startActivityForResult(intent, REQUEST_CODE_SENTENCE);
             }
         });
 
@@ -166,6 +169,14 @@ public class PhotoEditActivity extends AppCompatActivity {
                 }
             } else if (resultCode == RESULT_CANCELED) {
                 makeToast("사진 선택 취소");
+            }
+        }
+
+        if(requestCode == REQUEST_CODE_SENTENCE) {
+            if(resultCode == RESULT_OK) {
+                mPhotoEditor.addText(getIntent().getStringExtra("sentence"), Color.BLACK);
+            } else if (resultCode == RESULT_CANCELED) {
+                makeToast("문장 선택 취소");
             }
         }
     }
