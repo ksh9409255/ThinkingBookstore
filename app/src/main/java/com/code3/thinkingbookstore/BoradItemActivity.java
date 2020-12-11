@@ -51,7 +51,7 @@ public class BoradItemActivity extends AppCompatActivity {
         bookIntro = (TextView)findViewById(R.id.text_borad_source);
         postIdx = getIntent().getStringExtra("postIdx");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference databaseReference = database.getReference("post_list").child(postIdx);
+        DatabaseReference databaseReference = database.getReference("post_list").child(String.valueOf(postIdx));
         storage = FirebaseStorage.getInstance();
         homeData=new RecyclerHomeData();
         getData(this,databaseReference);
