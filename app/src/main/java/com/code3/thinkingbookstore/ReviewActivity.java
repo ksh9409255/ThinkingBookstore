@@ -87,7 +87,7 @@ public class ReviewActivity extends AppCompatActivity {
     private void DataInit(ReviewActivity view,DatabaseReference databaseReference){
         recyclerViewReview = (RecyclerView) view.findViewById(R.id.recyclerView_review_list);
         recyclerViewReview.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(recyclerViewReview.getContext(),LinearLayoutManager.HORIZONTAL,false);
+        layoutManager = new LinearLayoutManager(recyclerViewReview.getContext());
         recyclerViewReview.setLayoutManager(layoutManager);
         adapter = new RecyclerReviewAdapter();
         getData(databaseReference);

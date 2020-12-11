@@ -2,7 +2,7 @@ package com.code3.thinkingbookstore;
 
 public class RecyclerHomeData {
     private String imageView;
-    private int postIdx;
+    private String postIdx;
     private String userName;
     private String bookSource;
     private String writer;
@@ -11,9 +11,16 @@ public class RecyclerHomeData {
     public RecyclerHomeData(){
 
     }
-    public RecyclerHomeData(String imageView,int postIdx,String userName,String bookSource,String writer,String bookName){
+    public RecyclerHomeData(String imageView,String postIdx,String userName,String bookSource,String writer,String bookName){
         this.imageView=imageView;
         this.postIdx=postIdx;
+        this.userName=userName;
+        this.bookSource=bookSource;
+        this.writer=writer;
+        this.bookName=bookName;
+    }
+    public RecyclerHomeData(String imageView,String userName,String bookSource,String writer,String bookName){
+        this.imageView=imageView;
         this.userName=userName;
         this.bookSource=bookSource;
         this.writer=writer;
@@ -24,8 +31,8 @@ public class RecyclerHomeData {
     public String getImageView(){return imageView;}
     public void setImageView(String imageView){this.imageView=imageView;}
 
-    public int getPostIdx(){return postIdx;}
-    public void setPostIdx(int postIdx){this.postIdx=postIdx;}
+    public String getPostIdx(){return postIdx;}
+    public void setPostIdx(String postIdx){this.postIdx=postIdx;}
 
     public String getUserName(){return userName;}
     public void setUserName(String userName){this.userName=userName;}
