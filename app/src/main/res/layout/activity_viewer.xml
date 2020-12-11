@@ -153,86 +153,90 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/drawer_viewer"
-        android:layout_width="200dp"
-        android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        android:orientation="vertical"
-        android:visibility="gone">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:background="@drawable/border_right">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="10dp"
-                android:text="목차"
-                android:gravity="center"
-                android:background="@drawable/border_under"
-                android:textColor="#000000"
-                android:textSize="25dp" />
-            <ImageButton
-                android:id="@+id/backbtn_chlist"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_gravity="center_vertical|right"
-                android:src="@drawable/back"
-                android:padding="10dp"
-                android:layout_marginRight="10dp"
-                android:background="#00FFFFFF" />
-        </FrameLayout>
-        <ListView
-            android:id="@+id/chapter_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="80dp"
-            android:overScrollMode="never" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/downbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="20dp"
-        android:paddingTop="20dp"
-        android:background="#FFFFFF"
-        android:layout_gravity="bottom"
-        android:weightSum="5">
-        <ImageButton
-            android:id="@+id/list_viewer"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="left"
-            android:src="@drawable/btn_list"
-            android:background="#FFFFFF"
-            android:layout_weight="1"/>
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+        android:orientation="vertical"
+        android:layout_gravity="bottom">
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent">
-            <Button
-                android:id="@+id/page_viewer"
+            android:id="@+id/drawer_viewer"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="#FFFFFF"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/border_right">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="목차"
+                    android:gravity="center"
+                    android:background="@drawable/border_under"
+                    android:textColor="#000000"
+                    android:textSize="25dp" />
+                <ImageButton
+                    android:id="@+id/backbtn_chlist"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    android:padding="10dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#00FFFFFF" />
+            </FrameLayout>
+            <ListView
+                android:id="@+id/chapter_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/downbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
+            android:background="#FFFFFF"
+            android:layout_gravity="bottom"
+            android:weightSum="5">
+            <ImageButton
+                android:id="@+id/list_viewer"
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="#00FFFFFF"
-                android:stateListAnimator="@null"
-                android:textAllCaps="false"
-                android:text=""
-                android:textSize="30dp"
-                android:focusable="false" />
-            <TextView
-                android:id="@+id/chnow_viewer"
+                android:layout_gravity="left"
+                android:src="@drawable/btn_list"
+                android:background="#FFFFFF"
+                android:layout_weight="1"/>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textSize="15dp"
-                android:text=""/>
+                android:layout_height="match_parent">
+                <Button
+                    android:id="@+id/page_viewer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:background="#00FFFFFF"
+                    android:stateListAnimator="@null"
+                    android:textAllCaps="false"
+                    android:text=""
+                    android:textSize="30dp"
+                    android:focusable="false" />
+                <TextView
+                    android:id="@+id/chnow_viewer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:textSize="15dp"
+                    android:text=""/>
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

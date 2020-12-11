@@ -1,9 +1,14 @@
 package com.code3.thinkingbookstore;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,11 +30,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LikedSentenceActivity extends AppCompatActivity {
-    private ListView listView;
     private ImageButton back;
     ArrayList<Sentence> sentenceList;
     static boolean calledAlready = false;
-    StListAdapter myAdapter;
+    StListAdapter mAdapter;
+    RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +47,32 @@ public class LikedSentenceActivity extends AppCompatActivity {
         }
 
         sentenceList = new ArrayList<Sentence>();
-        listView = (ListView)findViewById(R.id.list_sentence);
-        myAdapter = new StListAdapter(this, sentenceList);
-        listView.setAdapter(myAdapter);
+        mRecyclerView = (RecyclerView)findViewById(R.id.list_sentence);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+
+        mAdapter = new StListAdapter(sentenceList);
+        mRecyclerView.setAdapter(mAdapter);
+
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(mRecyclerView.getContext(),
+                mLinearLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        if(getIntent().getExtras().getString("isGetting") != null) {
+            mAdapter.setOnItemClickListener(new StListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int pos) {
+                    Intent intent = getIntent();
+                    intent.putExtra("sentence", mAdapter.sentence.get(pos).st);
+                    Log.e("string", mAdapter.sentence.get(pos).st);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        } else {
+
+        }
+
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference dataRef = database.getReference("sentence_like").child(getIntent().getExtras().getString("bookIdx"));
@@ -52,10 +80,10 @@ public class LikedSentenceActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    //Log.i("i", dataSnapshot.getKey()+"<<<<<<<<<<"+dataSnapshot.getValue());
+                    Log.i("i", dataSnapshot.getKey()+"<<<<<<<<<<"+dataSnapshot.getValue());
                     sentenceList.add(new Sentence(dataSnapshot.getValue().toString(), dataSnapshot.getKey()));
                 }
-                myAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -70,6 +98,25 @@ public class LikedSentenceActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private static final int REQUEST_CODE_SENTENCE = 1;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.e("requestcode <<<<<<<<<<", requestCode+"");
+        if(requestCode == REQUEST_CODE_SENTENCE) {
+            mAdapter.setOnItemClickListener(new StListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View v, int pos) {
+                    Intent intent = getIntent();
+                    intent.putExtra("sentence", mAdapter.sentence.get(pos).st);
+                    Log.e("string", mAdapter.sentence.get(pos).st);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
+            });
+        }
     }
 
     public class Sentence {

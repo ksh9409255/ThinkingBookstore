@@ -1,13 +1,12 @@
 package com.code3.thinkingbookstore;
 
-import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,29 +17,27 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
-public class StListAdapter extends RecyclerView.Adapter<StListAdapter.CustomViewHolder> {
-    ArrayList<LikedSentenceActivity.Sentence> sentence;
+public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.CustomViewHolder> {
+    ArrayList<GetSentence1Activity.Books> books;
 
     public interface OnItemClickListener {
         void onItemClick(View v, int pos);
     }
-    private StListAdapter.OnItemClickListener mListener = null;
-    public void setOnItemClickListener(StListAdapter.OnItemClickListener listener) {
+    private OnItemClickListener mListener = null;
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.mListener = listener;
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
-        protected TextView likeduser;
-        protected TextView likedst;
+        protected ImageView bookcover;
+        protected TextView name;
 
         public CustomViewHolder(View view) {
             super(view);
-            this.likeduser = (TextView)view.findViewById(R.id.liked_user);
-            this.likedst = (TextView)view.findViewById(R.id.liked_sentence);
+            this.bookcover = (ImageView)view.findViewById(R.id.bookcover_list1);
+            this.name = (TextView)view.findViewById(R.id.bookname_list1);
 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,35 +52,46 @@ public class StListAdapter extends RecyclerView.Adapter<StListAdapter.CustomView
         }
     }
 
+    public BookListAdapter(ArrayList<GetSentence1Activity.Books> data) {
+        this.books = data;
+    }
+
     @NonNull
     @Override
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.sentence_listitem, parent, false);
+                .inflate(R.layout.book_listitem, parent, false);
 
-        StListAdapter.CustomViewHolder viewHolder = new StListAdapter.CustomViewHolder(view);
+        CustomViewHolder viewHolder = new CustomViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
-        Log.e("sentence", sentence.get(position).getSt());
-        holder.likedst.setText(sentence.get(position).getSt());
-        holder.likeduser.setText(sentence.get(position).getUser());
+        StorageReference storageRef;
+        storageRef = FirebaseStorage.getInstance().getReferenceFromUrl(books.get(position).getBookcover());
+        storageRef.getBytes(1024 * 1024).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                holder.bookcover.setImageBitmap(bitmap);
+            }
+        });
+
+        holder.name.setText(books.get(position).getName());
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return i;
     }
 
     @Override
     public int getItemCount() {
-        return (null != sentence ? sentence.size() : 0);
+        return (null != books ? books.size() : 0);
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    public StListAdapter(ArrayList<LikedSentenceActivity.Sentence> data) {
-        this.sentence = data;
+    public BookListAdapter() {
     }
 }
