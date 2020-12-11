@@ -30,7 +30,6 @@ public class GetSentence1Activity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     static boolean calledAlready = false;
     BookListAdapter mAdapter;
-    TextView text1, text2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +37,6 @@ public class GetSentence1Activity extends AppCompatActivity {
         setContentView(R.layout.activity_get_sentence1);
 
         back = (ImageButton)findViewById(R.id.backbtn_list1);
-        text1 = new TextView(this);
-        text2 = new TextView(this);
 
         if(!calledAlready) {
             FirebaseDatabase.getInstance();
@@ -92,8 +89,9 @@ public class GetSentence1Activity extends AppCompatActivity {
             @Override
             public void onItemClick(View v, int pos) {
                 Intent intent = getIntent();
-                intent.putExtra("bookIdx", pos + 2);
-                intent.setClass(GetSentence1Activity.this, GetSentence2Activity.class);
+                intent.putExtra("bookIdx", (pos + 2)+"");
+                intent.putExtra("isGetting", "yes");
+                intent.setClass(GetSentence1Activity.this, LikedSentenceActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
                 startActivity(intent);
                 finish();

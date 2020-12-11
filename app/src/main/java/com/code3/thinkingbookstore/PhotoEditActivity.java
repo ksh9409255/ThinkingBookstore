@@ -108,7 +108,12 @@ public class PhotoEditActivity extends AppCompatActivity {
                         @Override
                         public void onEditTextChangeListener(View rootView, String text, int colorCode) {
                             //mPhotoEditor.editText(rootView, text, Color.GREEN);
-                            makeToast(text+" 선택");
+                            if(text.length() >= 10) {
+                                makeToast("\""+text.substring(1, 10)+"...\" 선택");
+                            } else {
+                                makeToast(text+" 선택");
+                            }
+
                             iseditable.setVisibility(View.GONE);
                             for(int i=0; i<Buttons.length; i++) {
                                 final int index;
@@ -174,7 +179,7 @@ public class PhotoEditActivity extends AppCompatActivity {
 
         if(requestCode == REQUEST_CODE_SENTENCE) {
             if(resultCode == RESULT_OK) {
-                mPhotoEditor.addText(getIntent().getStringExtra("sentence"), Color.BLACK);
+                mPhotoEditor.addText(data.getStringExtra("sentence"), Color.BLACK);
             } else if (resultCode == RESULT_CANCELED) {
                 makeToast("문장 선택 취소");
             }
