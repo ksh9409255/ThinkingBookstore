@@ -30,7 +30,7 @@
     <ImageView
         android:id="@+id/upload_content_image_view"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:src="@drawable/empty"
         app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
         tools:ignore="MissingConstraints" />
@@ -49,7 +49,7 @@
     <EditText
         android:id="@+id/upload_edit_detail"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:background="@drawable/edit_text_rec"
         android:fontFamily="@font/nanum_barun_gothic_bold"
         android:layout_marginTop="10dp"
