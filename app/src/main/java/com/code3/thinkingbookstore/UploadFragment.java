@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -90,7 +91,10 @@ public class UploadFragment extends Fragment {
         if(requestCode==2000){
             if(resultCode==RESULT_OK){
                 imageView="/data/data/com.code3.thinkingbookstore/files/temp.jpg";
-                Glide.with(getView()).load(imageView).into(uploadPic);
+                Glide.with(this).load(imageView)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(uploadPic);
             }
         }
     }
