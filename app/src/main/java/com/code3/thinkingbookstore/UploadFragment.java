@@ -107,6 +107,7 @@ public class UploadFragment extends Fragment {
                         .skipMemoryCache(true)
                         .into(uploadPic);
                 imageView=String.valueOf(imgRef);
+
             }
         }
     }
