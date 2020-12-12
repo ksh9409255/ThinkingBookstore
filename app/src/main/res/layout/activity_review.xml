@@ -65,6 +65,7 @@
         android:background="@drawable/edit_review"
         android:fontFamily="@font/nanum_barun_gothic_bold"
         android:hint="한줄 리뷰를 작성해주세요."
+        android:textAlignment="center"
         android:padding="10dp"
         android:textColorHint="#ababab"
         app:layout_constraintEnd_toEndOf="parent"
