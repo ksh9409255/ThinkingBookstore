@@ -76,7 +76,7 @@ public class ReviewActivity extends AppCompatActivity {
             rootRef.child("review_list").child(bookIdx).push().setValue(reviewData);
             rootRef.child(user.getDisplayName()).push().setValue(mypageData);
             Toast.makeText(this,"리뷰 등록이 완료되었습니다!",Toast.LENGTH_SHORT).show();
-            this.recreate();
+            reviewEdit.getText().clear();
         });
         btnGoodSent.setOnClickListener(l->{
             Intent intent = new Intent(this,LikedSentenceActivity.class);
