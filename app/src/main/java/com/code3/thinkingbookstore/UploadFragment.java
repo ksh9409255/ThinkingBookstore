@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -28,8 +29,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.io.File;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import ja.burhanrashid52.photoeditor.OnPhotoEditorListener;
 import ja.burhanrashid52.photoeditor.PhotoEditor;
@@ -90,11 +96,18 @@ public class UploadFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==2000){
             if(resultCode==RESULT_OK){
+                SimpleDateFormat sdf= new SimpleDateFormat("yyyyMMddhhmmss");
+                String filename= sdf.format(new Date())+ ".jpg";
                 imageView="/data/data/com.code3.thinkingbookstore/files/temp.jpg";
-                Glide.with(this).load(imageView)
-                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                Uri file = Uri.fromFile(new File(imageView));
+                FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
+                StorageReference imgRef= firebaseStorage.getReference("post/uploads/"+filename);
+                imgRef.putFile(file);
+                Glide.with(getView()).load(imageView).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .into(uploadPic);
+                imageView=String.valueOf(imgRef);
+
             }
         }
     }
