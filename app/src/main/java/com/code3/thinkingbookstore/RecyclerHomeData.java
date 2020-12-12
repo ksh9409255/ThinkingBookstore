@@ -7,24 +7,18 @@ public class RecyclerHomeData {
     private String bookSource;
     private String writer;
     private String bookName;
+    private String imagePath;
 
     public RecyclerHomeData(){
 
     }
-    public RecyclerHomeData(String imageView,String postIdx,String userName,String bookSource,String writer,String bookName){
-        this.imageView=imageView;
-        this.postIdx=postIdx;
-        this.userName=userName;
-        this.bookSource=bookSource;
-        this.writer=writer;
-        this.bookName=bookName;
-    }
-    public RecyclerHomeData(String imageView,String userName,String bookSource,String writer,String bookName){
+    public RecyclerHomeData(String imageView,String userName,String bookSource,String writer,String bookName,String imagePath){
         this.imageView=imageView;
         this.userName=userName;
         this.bookSource=bookSource;
         this.writer=writer;
         this.bookName=bookName;
+        this.imagePath=imagePath;
     }
 
 
@@ -45,5 +39,8 @@ public class RecyclerHomeData {
 
     public String getBookName(){return bookName;}
     public void setBookName(String bookName){this.bookName=bookName;}
+
+    public String getImagePath(){return imagePath;}
+    public void setImagePath(String imagePath){this.imagePath=imagePath;}
 
 }
