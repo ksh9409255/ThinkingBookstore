@@ -35,7 +35,7 @@
         android:id="@+id/newnick"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="특수문자 입력 불가"
+        android:hint="한글, 특수문자 입력 불가"
         android:layout_marginBottom="20dp"
         android:background="@drawable/login_edit"
         android:textSize="20dp"
