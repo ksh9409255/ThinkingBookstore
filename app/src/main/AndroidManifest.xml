@@ -21,25 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PhotoEditActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".PhotoEditActivity" />
         <activity android:name=".GetSentence1Activity" />
         <activity android:name=".VideoActivity" />
         <activity android:name=".PlaceDetailActivity" />
         <activity android:name=".ViewerActivity" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".LikedSentenceActivity" />
         <activity android:name=".ReviewActivity" />
         <activity android:name=".BoradItemActivity" />
