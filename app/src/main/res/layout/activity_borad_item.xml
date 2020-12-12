@@ -30,11 +30,11 @@
 
     <Button
         android:id="@+id/btn_down_borad"
-        android:layout_width="43dp"
-        android:layout_height="53dp"
+        android:layout_width="33dp"
+        android:layout_height="43dp"
         android:background="@drawable/btn_down"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/content_borad"
         tools:ignore="MissingConstraints" />
@@ -122,7 +122,7 @@
     <ImageView
         android:id="@+id/content_borad"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:layout_marginTop="50dp"
         android:src="@drawable/sample_image"
         app:layout_constraintEnd_toEndOf="parent"
