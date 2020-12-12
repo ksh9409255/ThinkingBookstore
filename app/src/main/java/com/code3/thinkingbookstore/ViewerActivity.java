@@ -42,6 +42,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
@@ -583,8 +584,12 @@ public class ViewerActivity extends AppCompatActivity {
                                 @Override
                                 public void onReceiveValue(String value) {
                                     FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                                    onLikeClicked(value, getIntent().getStringExtra("bookIdx"), user.getDisplayName());
-                                    makeToast("좋아요 완료");
+                                    try {
+                                        onLikeClicked(value, getIntent().getStringExtra("bookIdx"), user.getDisplayName());
+                                        makeToast("좋아요 완료");
+                                    } catch(DatabaseException e) {
+                                        makeToast(". # $ [ ] 문자가 들어가면 안됩니다");
+                                    }
                                     //Log.i("i", value+"<<<<<<<<<<<<<<<<<<<");
                                 }
                             });
