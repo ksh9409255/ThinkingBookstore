@@ -60,17 +60,6 @@ public class RecyclerMypageAdapter extends RecyclerView.Adapter<RecyclerMypageAd
             Glide.with(itemView).load(listData.getImageView()).into(contentImageView);
             review.setText(listData.getOneReview());
             date.setText(listData.getDate());
-            String temp = listData.getOneReview();
-            try {
-                String piece0 = temp.substring(0, temp.indexOf("@"));
-                String piece1 = temp.substring(temp.indexOf("@"), temp.indexOf("%")+1);
-                String piece2 = temp.substring(temp.indexOf("%") + 1);
-
-                temp =  piece0 + "<font color = '#6200EE'>" + piece1 + "</font>" + piece2;
-            } catch(RuntimeException e) {
-                Log.e("error", "runtime err");
-            }
-            review.setText(Html.fromHtml(temp));
             contentImageView.setClipToOutline(true);
         }
     }
