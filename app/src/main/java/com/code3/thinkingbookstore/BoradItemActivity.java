@@ -2,8 +2,12 @@ package com.code3.thinkingbookstore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +43,10 @@ public class BoradItemActivity extends AppCompatActivity {
     private String postIdx;
     private String imagePath;
     RecyclerHomeData homeData;
+
+    boolean fileReadPermission;
+    boolean fileWritePermission;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +68,15 @@ public class BoradItemActivity extends AppCompatActivity {
         btnBack.setOnClickListener(l -> {
             finish();
         });
-
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+            fileReadPermission=true;
+        }
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED){
+            fileWritePermission=true;
+        }
+        if(!fileReadPermission||!fileWritePermission){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE},200);
+        }
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
@@ -80,7 +96,18 @@ public class BoradItemActivity extends AppCompatActivity {
                 });
             }
         });
-
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode==200&&grantResults.length>0){
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                fileReadPermission=true;
+            }
+            if(grantResults[1]==PackageManager.PERMISSION_GRANTED){
+                fileReadPermission=true;
+            }
+        }
     }
     private void getData(BoradItemActivity view,DatabaseReference databaseReference){
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
