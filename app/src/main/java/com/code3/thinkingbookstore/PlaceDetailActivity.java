@@ -155,6 +155,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     hatebtn.setSelected(dataSnapshot.hasChild(currentUserId));
                     likebtn.setEnabled(!dataSnapshot.hasChild(currentUserId));
                     if(hatebtn.isSelected()) likealpha.setAlpha(80);
+                    else likealpha.setAlpha(255);
                 }
             }
 
@@ -179,13 +180,13 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     hatesRef.setValue(numHates-1);
                     uidRef.removeValue();
                     likebtn.setEnabled(true);
-                    likealpha.setAlpha(255);
+                    //likealpha.setAlpha(255);
 
                 } else {
                     hatesRef.setValue(numHates+1);
                     uidRef.setValue(userId);
                     likebtn.setEnabled(false);
-                    likealpha.setAlpha(80);
+                    //likealpha.setAlpha(80);
                 }
             }
 
@@ -213,6 +214,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     likebtn.setSelected(dataSnapshot.hasChild(currentUserId));
                     hatebtn.setEnabled(!dataSnapshot.hasChild(currentUserId));
                     if(likebtn.isSelected()) hatealpha.setAlpha(80);
+                    else hatealpha.setAlpha(255);
                 }
             }
 
@@ -238,13 +240,13 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     likesRef.setValue(numLikes-1);
                     uidRef.removeValue();
                     hatebtn.setEnabled(true);
-                    hatealpha.setAlpha(255);
+                    //hatealpha.setAlpha(255);
                 } else {
                     //If not liked already then user wants to like the post
                     likesRef.setValue(numLikes+1);
                     uidRef.setValue(userId);
                     hatebtn.setEnabled(false);
-                    hatealpha.setAlpha(80);
+                    //hatealpha.setAlpha(80);
                 }
             }
 
