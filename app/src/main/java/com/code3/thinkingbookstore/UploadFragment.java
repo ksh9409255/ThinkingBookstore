@@ -94,6 +94,10 @@ public class UploadFragment extends Fragment {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = database.getReference("post_list");
             databaseReference.push().setValue(data);
+            uploadDetail.getText().clear();
+            uploadWriter.getText().clear();
+            uploadBookName.getText().clear();
+            Toast.makeText(getContext(),"포스팅 성공!",Toast.LENGTH_SHORT).show();
         });
         return view;
     }

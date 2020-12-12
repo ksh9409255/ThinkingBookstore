@@ -121,8 +121,9 @@
 
     <ImageView
         android:id="@+id/content_borad"
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:scaleType="centerInside"
         android:layout_marginTop="50dp"
         android:src="@drawable/sample_image"
         app:layout_constraintEnd_toEndOf="parent"

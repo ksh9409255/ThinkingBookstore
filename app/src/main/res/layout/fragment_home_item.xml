@@ -10,7 +10,7 @@
         android:id="@+id/content_image_view"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:scaleType="fitXY"
+        android:scaleType="centerInside"
         android:src="@drawable/sample_image"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints"
