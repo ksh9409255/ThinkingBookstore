@@ -19,7 +19,7 @@
         />
     <item
         android:id="@+id/menu_myPage"
-        android:icon="@drawable/btn_mypage"
+        android:icon="@drawable/ic_user"
         android:title="마이페이지"
         />
 </menu>

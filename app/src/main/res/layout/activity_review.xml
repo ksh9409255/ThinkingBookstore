@@ -29,18 +29,19 @@
         app:layout_constraintEnd_toEndOf="@+id/review_toolbar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/review_toolbar" />
+
     <TextView
         android:id="@+id/text_review_user"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/nanum_barun_gothic_bold"
         android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nanum_barun_gothic_bold"
         android:text="유저1님"
         android:textColor="#000000"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/review_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/text_good_detail" />
 
     <TextView
         android:id="@+id/text_review_detail"
@@ -56,12 +57,16 @@
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/edit_text_rec"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/edit_review"
         android:fontFamily="@font/nanum_barun_gothic_bold"
         android:hint="한줄 리뷰를 작성해주세요."
+        android:padding="10dp"
+        android:textColorHint="#ababab"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_review_detail"
@@ -82,29 +87,29 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:background="@drawable/thumbs_up"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_review_reg"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        app:layout_constraintEnd_toEndOf="@+id/review_toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/text_good_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/nanum_barun_gothic_bold"
         android:text="엄지를 눌러 이 책의 좋아요 문장을 확인해보세요!"
-        android:layout_marginTop="10dp"
         android:textColor="#000000"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_good_sent" />
+        app:layout_constraintTop_toBottomOf="@+id/review_toolbar" />
     <Button
         android:id="@+id/btn_review_reg"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:background="#6200EE"
+        android:background="@drawable/btn_review_upload"
         android:fontFamily="@font/nanum_barun_gothic_bold"
         android:layout_marginTop="10dp"
         android:text="리뷰 등록하기"
@@ -114,25 +119,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editText" />
 
-    <TextView
-        android:id="@+id/text_review_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/nanum_barun_gothic_bold"
-        android:text="한 줄 리뷰"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_good_detail" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_review_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="#FFFFFF"
-        android:layout_marginTop="500dp"
+        android:layout_marginTop="350dp"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
