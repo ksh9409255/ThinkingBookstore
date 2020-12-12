@@ -63,6 +63,7 @@ public class RecyclerHomeAdapter extends RecyclerView.Adapter<RecyclerHomeAdapte
                 public void onClick(View view) {
                     Intent intent = new Intent(itemView.getContext(), BoradItemActivity.class);
                     intent.putExtra("postIdx", listData.getPostIdx());
+                    intent.putExtra("imagePath", listData.getImagePath());
                     itemView.getContext().startActivity(intent);
                 }
             });

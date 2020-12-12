@@ -37,6 +37,7 @@ public class BoradItemActivity extends AppCompatActivity {
 
     FirebaseStorage storage;
     private String postIdx;
+    private String imagePath;
     RecyclerHomeData homeData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class BoradItemActivity extends AppCompatActivity {
         bookName = (TextView)findViewById(R.id.text_borad_bookname);
         bookIntro = (TextView)findViewById(R.id.text_borad_source);
         postIdx = getIntent().getStringExtra("postIdx");
+        imagePath = getIntent().getStringExtra("imagePath");
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference = database.getReference("post_list").child(String.valueOf(postIdx));
         storage = FirebaseStorage.getInstance();
@@ -62,9 +64,9 @@ public class BoradItemActivity extends AppCompatActivity {
         btnDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view){
-                StorageReference pathReference = storage.getReference().child("post/" + "sample_image" + ".png");
+                StorageReference pathReference = storage.getReference().child("post/uploads/" + imagePath);
                 File localFile = null;
-                localFile = new File("/storage/self/primary/Pictures/" +"sample_image" + ".png");
+                localFile = new File("/storage/self/primary/Pictures/" + imagePath);
                 pathReference.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
@@ -94,15 +96,15 @@ public class BoradItemActivity extends AppCompatActivity {
                         homeData.setBookSource((String)snapshot.getValue());
                         bookIntro.setText(homeData.getBookSource());
                     }
-                    else if(cnt==2){
+                    else if(cnt==3){
                         homeData.setImageView((String)snapshot.getValue());
                         Glide.with(view).load(homeData.getImageView()).into(contentBorad);
                     }
-                    else if(cnt==3){
+                    else if(cnt==4){
                         homeData.setUserName((String)snapshot.getValue());
                         userName.setText(homeData.getUserName());
                     }
-                    else if(cnt==4){
+                    else if(cnt==5){
                         homeData.setWriter((String)snapshot.getValue());
                         writerName.setText(homeData.getWriter());
                     }

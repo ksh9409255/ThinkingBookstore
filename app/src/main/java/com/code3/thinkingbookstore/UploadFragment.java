@@ -90,7 +90,7 @@ public class UploadFragment extends Fragment {
             String bookName = uploadBookName.getText().toString().trim();
             user = FirebaseAuth.getInstance().getCurrentUser();
 
-            data = new RecyclerHomeData(imageView,user.getDisplayName(),detail,writer,bookName);
+            data = new RecyclerHomeData(imageView,user.getDisplayName(),detail,writer,bookName,filename);
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = database.getReference("post_list");
             databaseReference.push().setValue(data);

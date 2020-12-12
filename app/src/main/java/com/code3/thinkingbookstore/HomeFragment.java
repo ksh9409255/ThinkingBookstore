@@ -65,9 +65,12 @@ public class HomeFragment extends Fragment {
                             homeData.setBookSource((String)ds.getValue());
                         }
                         else if(cnt==2){
+                            homeData.setImagePath((String)ds.getValue());
+                        }
+                        else if(cnt==3){
                             homeData.setImageView((String)ds.getValue());
                         }
-                        else if(cnt==4){
+                        else if(cnt==5){
                             homeData.setWriter((String)ds.getValue());
                         }
                         cnt++;
