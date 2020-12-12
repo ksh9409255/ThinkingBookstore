@@ -154,6 +154,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     hatenum.setText(""+numOfHates);
                     hatebtn.setSelected(dataSnapshot.hasChild(currentUserId));
                     likebtn.setEnabled(!dataSnapshot.hasChild(currentUserId));
+                    if(hatebtn.isSelected()) likealpha.setAlpha(80);
                 }
             }
 
@@ -211,6 +212,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     likenum.setText(""+numOfLikes);
                     likebtn.setSelected(dataSnapshot.hasChild(currentUserId));
                     hatebtn.setEnabled(!dataSnapshot.hasChild(currentUserId));
+                    if(likebtn.isSelected()) hatealpha.setAlpha(80);
                 }
             }
 
