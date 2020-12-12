@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,12 +26,18 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.firebase.storage.UploadTask.TaskSnapshot;
 
 import java.io.File;
 import java.io.InputStream;
@@ -55,7 +62,7 @@ public class UploadFragment extends Fragment {
     FirebaseUser user;
 
     String imageView = "https://firebasestorage.googleapis.com/v0/b/thinkingbookshop.appspot.com/o/post%2Fempty.png?alt=media&token=3b7e50a9-188c-488d-9cd8-0a6b0a837320";
-
+    String filename;
     private RecyclerHomeData data;
 
 
@@ -83,8 +90,8 @@ public class UploadFragment extends Fragment {
             String bookName = uploadBookName.getText().toString().trim();
             user = FirebaseAuth.getInstance().getCurrentUser();
 
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
             data = new RecyclerHomeData(imageView,user.getDisplayName(),detail,writer,bookName);
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference databaseReference = database.getReference("post_list");
             databaseReference.push().setValue(data);
         });
@@ -97,7 +104,7 @@ public class UploadFragment extends Fragment {
         if(requestCode==2000){
             if(resultCode==RESULT_OK){
                 SimpleDateFormat sdf= new SimpleDateFormat("yyyyMMddhhmmss");
-                String filename= sdf.format(new Date())+ ".jpg";
+                filename= sdf.format(new Date())+ ".jpg";
                 imageView="/data/data/com.code3.thinkingbookstore/files/temp.jpg";
                 Uri file = Uri.fromFile(new File(imageView));
                 FirebaseStorage firebaseStorage= FirebaseStorage.getInstance();
@@ -106,8 +113,18 @@ public class UploadFragment extends Fragment {
                 Glide.with(getView()).load(imageView).diskCacheStrategy(DiskCacheStrategy.NONE)
                         .skipMemoryCache(true)
                         .into(uploadPic);
-                imageView=String.valueOf(imgRef);
-
+                imgRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        imgRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Log.e("url<<<<<<<<<", uri.toString());
+                                imageView= uri.toString();
+                            }
+                        });
+                    }
+                });
             }
         }
     }
