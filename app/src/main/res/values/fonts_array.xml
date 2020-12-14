@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fonts">
+        <item>Acme</item>
+        <item>IndieFlower</item>
+        <item>SansitaSwashed</item>
+    </string-array>
+</resources>

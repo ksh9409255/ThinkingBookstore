@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,12 +46,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null) {  // 로그인 안되어있으면
+        if(user == null) {  // 로그인 안되어있으면
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else {    // 로그인 되어있으면
 
         }
-
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bn_bottom_navi);
         bottomNavigationView.setItemIconTintList(null);

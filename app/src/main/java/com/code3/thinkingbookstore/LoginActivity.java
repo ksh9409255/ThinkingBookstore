@@ -17,10 +17,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-    EditText idIn, pwIn;
-    InputMethodManager imm;
-    Button loginBtn, regiBtn;
-    FirebaseAuth mAuth;
+    private EditText idIn, pwIn;
+    private InputMethodManager imm;
+    private Button loginBtn, regiBtn;
+    private FirebaseAuth mAuth;
     Toast mToast;
 
     @Override
@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
+                overridePendingTransition(0, 0);
             }
         });
     }
